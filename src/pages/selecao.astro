@@ -1,0 +1,44 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SECAO_LABEL, essayPath, sortByDateDesc } from "../lib/site";
+import { amazonSearch } from "../lib/amazon";
+
+const essays = sortByDateDesc(await getCollection("diario")).filter((e) => e.data.selecao?.length);
+---
+
+<BaseLayout
+  title="A seleção Lavi"
+  description="Objetos indicados nos ensaios da Lavi. Lista quieta, com divulgação de afiliados."
+>
+  <div class="wrap">
+    <article class="prose fade-in" style="max-width: 40rem;">
+      <p class="kicker">Editorial</p>
+      <h1 class="page-title">A seleção</h1>
+      <p class="intro">
+        Peças que atravessaram um ensaio. Não é loja. Não é ranking. É o mesmo critério do texto: matéria, calma, uso.
+      </p>
+      <p class="fine">
+        Alguns links são afiliados. A Lavi pode receber comissão, sem custo extra para você. Leia a{" "}
+        <a href="/etica">ética editorial</a>.
+      </p>
+    </article>
+    <div class="selecao-index fade-in d1">
+      {essays.flatMap((entry) =>
+        (entry.data.selecao ?? []).map((item) => (
+          <article>
+            <p class="kicker">
+              {SECAO_LABEL[entry.data.secao]} · <a href={essayPath(entry)}>{entry.data.title}</a>
+            </p>
+            <h2>
+              <a href={amazonSearch(item.query)} rel="sponsored noopener noreferrer">
+                {item.title}
+              </a>
+            </h2>
+            <p class="muted">{item.reason}</p>
+          </article>
+        )),
+      )}
+    </div>
+  </div>
+</BaseLayout>

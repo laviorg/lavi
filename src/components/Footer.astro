@@ -1,0 +1,24 @@
+---
+import Wordmark from "./Wordmark.astro";
+import { SITE } from "../lib/site";
+---
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <Wordmark />
+    <div>
+      <nav class="footer-nav" aria-label="Rodapé">
+        <a href="/sobre">Sobre</a>
+        <a href="/casa">Casa</a>
+        <a href="/corpo">Corpo</a>
+        <a href="/ritual">Ritual</a>
+        <a href="/selecao">Seleção</a>
+        <a href="/guia">Guia</a>
+        <a href="/etica">Ética</a>
+        <a href="/para-marcas">Para marcas</a>
+        <a href="/rss.xml">RSS</a>
+      </nav>
+      <p class="footer-copy">&copy; {SITE.year} Lavi · <a href="/#cartas">Correspondência</a></p>
+    </div>
+  </div>
+</footer>

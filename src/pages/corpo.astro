@@ -1,0 +1,51 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { HUBS, EIXO_LABEL, essayPath, formatDate, countLabel, sortByDateDesc } from "../lib/site";
+
+const hub = HUBS.corpo;
+const essays = sortByDateDesc((await getCollection("diario")).filter((e) => e.data.secao === "corpo"));
+const axisCounts = Object.fromEntries(
+  hub.axes.map((a) => [a.eixo, essays.filter((e) => e.data.eixo === a.eixo).length]),
+);
+---
+
+<BaseLayout
+  title="Corpo"
+  description={hub.description}
+  current="/corpo"
+  ogImage={hub.ogImage}
+>
+  <div class="wrap">
+    <div class="fade-in hub">
+      <p class="kicker">{hub.kicker}</p>
+      <h1 class="page-title">{hub.title}</h1>
+      <p class="intro">{hub.intro}</p>
+      <section class="hub-axes" aria-label="Eixos de Corpo">
+        <p class="kicker">Neste hub</p>
+        <ul class="axis-grid">
+          {hub.axes.map((axis) => (
+            <li class="axis-card">
+              <span class="axis-card__label">{EIXO_LABEL[axis.eixo]}</span>
+              <span class="axis-card__blurb muted">{axis.blurb}</span>
+              <span class="axis-card__count">{countLabel(axisCounts[axis.eixo] ?? 0)}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+      <div class="essay-list hub-list">
+        {essays.map((entry) => (
+          <a class="secao-row" href={essayPath(entry)}>
+            <img src={entry.data.hero} alt={entry.data.heroAlt} width="720" height="480" loading="lazy" />
+            <div>
+              <p class="kicker">{EIXO_LABEL[entry.data.eixo]}</p>
+              <time class="date" datetime={entry.data.date.toISOString()}>{formatDate(entry.data.date)}</time>
+              <h2>{entry.data.title}</h2>
+              <p class="muted">{entry.data.description}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</BaseLayout>

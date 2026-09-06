@@ -1,0 +1,74 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SECAO_LABEL, essayPath, formatDate, sortByDateDesc, foldSearch } from "../lib/site";
+
+const essays = sortByDateDesc(await getCollection("diario"));
+const index = essays.map((entry) => ({
+  id: entry.id,
+  hay: foldSearch(`${entry.data.title} ${entry.data.description} ${entry.body ?? ""}`),
+}));
+---
+
+<BaseLayout
+  title="Buscar"
+  description="Busca no arquivo da Lavi. Título, descrição e texto dos ensaios."
+  robots="noindex,follow"
+>
+  <div class="wrap">
+    <div class="fade-in">
+      <p class="kicker">Arquivo</p>
+      <h1 class="page-title">Buscar</h1>
+      <p class="intro">Uma busca no texto. Sem índice externo, sem pressa.</p>
+      <form class="search-form" action="/buscar" method="get" role="search">
+        <label for="q">Palavra ou frase</label>
+        <div class="nl-row">
+          <input type="search" id="q" name="q" value="" placeholder="luz, linho, silêncio" autocomplete="off" />
+          <button type="submit">Buscar</button>
+        </div>
+      </form>
+      <p class="muted" data-count>O arquivo inteiro, abaixo. Escreva para afunilar.</p>
+      <div class="essay-list" data-search-list>
+        {essays.map((entry) => (
+          <a class="essay-row search-hit" href={essayPath(entry)} data-id={entry.id}>
+            <time class="date" datetime={entry.data.date.toISOString()}>{formatDate(entry.data.date)}</time>
+            <div>
+              <p class="kicker">{SECAO_LABEL[entry.data.secao]}</p>
+              <h2>{entry.data.title}</h2>
+              <p class="muted">{entry.data.description}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+      <p class="muted" data-empty hidden>Nada no arquivo com essas palavras.</p>
+    </div>
+    <script define:vars={{ index }}>
+      window.LAVI_SEARCH = index;
+    </script>
+    <script>
+      (function () {
+        var params = new URLSearchParams(location.search);
+        var q = (params.get("q") || "").trim().toLowerCase();
+        var input = document.getElementById("q");
+        if (input) input.value = params.get("q") || "";
+        if (!q) return;
+        var folded = q.normalize("NFD").replace(/\p{Diacritic}/gu, "");
+        var list = window.LAVI_SEARCH || [];
+        var map = {};
+        list.forEach(function (item) { map[item.id] = item.hay; });
+        var hits = document.querySelectorAll("[data-id]");
+        var n = 0;
+        hits.forEach(function (el) {
+          var hay = map[el.getAttribute("data-id")] || "";
+          var show = hay.indexOf(folded) !== -1;
+          el.hidden = !show;
+          if (show) n += 1;
+        });
+        var count = document.querySelector("[data-count]");
+        if (count) count.textContent = n === 1 ? "1 ensaio" : n + " ensaios";
+        var empty = document.querySelector("[data-empty]");
+        if (empty) empty.hidden = n > 0;
+      })();
+    </script>
+  </div>
+</BaseLayout>

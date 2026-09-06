@@ -1,0 +1,5 @@
+# Cloudflare Pages. Do not change DNS from this file.
+# Trailing slashes are stripped (live responds 308 → unsashed path).
+# Astro `trailingSlash: "never"` emits the same 308 at the origin.
+
+/*/ /:splat 308

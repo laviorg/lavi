@@ -1,0 +1,44 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SITE } from "../lib/site";
+---
+
+<BaseLayout
+  title="Ética"
+  description="Divulgação de afiliados, independência editorial e privacidade da Lavi."
+>
+  <div class="wrap">
+    <article class="prose">
+      <p class="kicker">Critério</p>
+      <h1 class="page-title">Ética editorial</h1>
+      <p>
+        A Lavi é independente. Ninguém compra um ensaio, uma posição na página inicial ou um silêncio. Produtos entram no texto porque cabem no critério — durabilidade, materia, calma — não porque pagaram para aparecer.
+      </p>
+      <h2>Links afiliados</h2>
+      <p>
+        <strong>Alguns links são afiliados e a Lavi pode ganhar comissão sem custo extra ao leitor.</strong> Isso vale, em especial, para buscas e produtos apontados a lojas como a Amazon Brasil, no bloco "A seleção Lavi", com ligações marcadas como sponsored.
+      </p>
+      <p>
+        A comissão não altera o preço que você paga. Também não altera a ordem do texto: primeiro o argumento, depois, se fizer sentido, a indicação.
+      </p>
+      <p>
+        Os links afiliados da Amazon Brasil usam a tag de Associados da Lavi. A comissão só existe se a compra acontecer a partir desses links.
+      </p>
+      <h2>O que não fazemos</h2>
+      <ul>
+        <li>Não aceitamos texto pago disfarçado de ensaio.</li>
+        <li>Não prometemos colocação nem volume de atenção.</li>
+        <li>Não operamos carrinho nem loja própria.</li>
+      </ul>
+      <h2>Privacidade e LGPD</h2>
+      <p>Este site é estático. Não usamos rastreio publicitário nem fontes carregadas de terceiros. Tipografia vem junto com o site.</p>
+      <p>
+        Se você deixa um e-mail no formulário, trata-se de pedido de correspondência. Não vendemos listas. Pedidos de acesso, correção ou exclusão:{" "}
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>, nos termos da Lei 13.709/2018.
+      </p>
+      <p>
+        Controladora: Lavi — <a href={`mailto:${SITE.email}`}>{SITE.email}</a>. Domínio: lavi.org.
+      </p>
+    </article>
+  </div>
+</BaseLayout>

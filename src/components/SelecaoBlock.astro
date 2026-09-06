@@ -1,0 +1,38 @@
+---
+import { amazonSearch } from "../lib/amazon";
+
+interface Item {
+  title: string;
+  query: string;
+  reason: string;
+}
+
+interface Props {
+  items: Item[];
+}
+
+const { items } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <aside class="selecao" aria-labelledby="selecao-title">
+      <p class="kicker">Editorial</p>
+      <h2 id="selecao-title">A seleção Lavi</h2>
+      <ol>
+        {items.map((item) => (
+          <li>
+            <a href={amazonSearch(item.query)} rel="sponsored noopener noreferrer">
+              {item.title}
+            </a>
+            <p class="reason">{item.reason}</p>
+          </li>
+        ))}
+      </ol>
+      <p class="fine">
+        Alguns links são afiliados. A Lavi pode receber comissão, sem custo extra para você. Leia a{" "}
+        <a href="/etica">ética editorial</a>.
+      </p>
+    </aside>
+  )
+}

@@ -1,0 +1,55 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SITE } from "../lib/site";
+---
+
+<BaseLayout
+  title="Casa com menos estímulo"
+  description="Guia digital em PDF: síntese dos ensaios de casa da Lavi, checklist por cômodo e ordem de subtração. R$ 49 — entrega via Hotmart após a compra."
+>
+  <div class="wrap">
+    <article class="prose fade-in">
+      <p class="kicker">Guia digital</p>
+      <h1 class="page-title">Casa com menos estímulo</h1>
+      <p class="intro">
+        Um PDF curto que ordena o que já está no diário: o que tirar primeiro, o que manter, e como comprar sem lista de desejo.
+      </p>
+      <p>
+        Os ensaios da Lavi sobre casa já dizem o essencial — luz, tecido, armário, mesa. O guia não substitui essa leitura. Junta-a em capítulos, acrescenta checklist por cômodo e uma ordem de subtração. Formato digital; o PDF chega pela Hotmart após a compra.
+      </p>
+      <p class="price-note">
+        <span class="price">R$&nbsp;49</span> · pagamento único · sem assinatura
+      </p>
+      <h2>O que o guia acrescenta</h2>
+      <ul>
+        <li>Síntese em capítulos a partir dos ensaios de Casa (e dois companheiros de Ritual).</li>
+        <li>Checklist por cômodo — sala, quarto, cozinha, o que cabe no armário.</li>
+        <li>Ordem de subtração: o que tirar primeiro, antes de comprar qualquer coisa.</li>
+        <li>Critérios de compra sem lista de ASIN — matéria, peso, luz, uso.</li>
+        <li>Uma página de “o que não comprar”.</li>
+      </ul>
+      <h2>Ensaios de origem</h2>
+      <p class="muted" style="margin-bottom: 0.75rem;">Núcleo Casa</p>
+      <ul>
+        <li><a href="/diario/luz-nao-habito">Luz, não hábito</a></li>
+        <li><a href="/diario/cama-linho-vs-algodao">Cama: linho vs algodão</a></li>
+        <li><a href="/diario/armario-pequeno-e-caro">Armário pequeno e caro</a></li>
+        <li><a href="/diario/ceramica-na-mesa">Cerâmica na mesa</a></li>
+      </ul>
+      <p class="muted" style="margin-bottom: 0.75rem;">Companheiros (Ritual)</p>
+      <ul>
+        <li><a href="/diario/silencio-na-sala">Silêncio na sala</a></li>
+        <li><a href="/diario/rotina-da-manha">Rotina da manhã</a></li>
+      </ul>
+      <h2>Compra</h2>
+      <p>Checkout pela Hotmart. Após o pagamento, o PDF fica disponível na sua conta Hotmart e no e-mail de confirmação.</p>
+      <p>
+        <a class="btn" href={SITE.hotmart} target="_blank" rel="noopener noreferrer">Comprar o guia — R$&nbsp;49</a>
+      </p>
+      <p class="fine" style="margin-top: 1.75rem;">
+        Afiliados Amazon seguem nos ensaios — tag laviorg-20 — com a regra em <a href="/etica">ética</a>. Dúvidas:{" "}
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+      </p>
+    </article>
+  </div>
+</BaseLayout>

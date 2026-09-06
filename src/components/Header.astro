@@ -1,0 +1,36 @@
+---
+import Wordmark from "./Wordmark.astro";
+
+interface Props {
+  current?: string;
+}
+
+const { current } = Astro.props;
+const links = [
+  { href: "/casa", label: "Casa" },
+  { href: "/corpo", label: "Corpo" },
+  { href: "/ritual", label: "Ritual" },
+  { href: "/diario", label: "Diário" },
+];
+---
+
+<header class="site-header">
+  <div class="header-inner">
+    <Wordmark />
+    <nav class="primary" aria-label="Principal">
+      <div class="nav-links">
+        {links.map((link) => (
+          <a href={link.href} aria-current={current === link.href ? "page" : undefined}>
+            {link.label}
+          </a>
+        ))}
+      </div>
+      <a class="nav-search" href="/buscar" aria-label="Buscar">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <circle cx="7" cy="7" r="4.25" stroke="currentColor" stroke-width="1.25"></circle>
+          <path d="M10.2 10.2 13.25 13.25" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"></path>
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>

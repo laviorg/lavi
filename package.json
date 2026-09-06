@@ -1,0 +1,21 @@
+{
+  "name": "lavi",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Lavi — curadoria silenciosa de casa, corpo e ritual. Revista estática em Astro.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.3.6",
+    "@astrojs/rss": "^4.0.12",
+    "@fontsource-variable/source-sans-3": "^5.2.8",
+    "@fontsource/newsreader": "^5.2.8",
+    "@fontsource/source-sans-3": "^5.2.8",
+    "astro": "^5.13.7"
+  }
+}

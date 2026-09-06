@@ -1,0 +1,64 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SITE } from "../lib/site";
+---
+
+<BaseLayout
+  title="Para marcas"
+  description="Media kit seletivo da Lavi. Sem tarifa pública, sem vitrine permanente. Contato: contato@lavi.org."
+>
+  <div class="wrap">
+    <article class="prose fade-in">
+      <p class="kicker">Seletiva</p>
+      <h1 class="page-title">Para marcas</h1>
+      <p class="intro">
+        A Lavi não abre vitrine. De vez em quando, uma peça entra no diário porque resiste ao uso e ao silêncio da casa. É raro. É editorial.
+      </p>
+      <h2>Quem somos</h2>
+      <p>
+        Lavi é uma curadoria silenciosa de casa, corpo e ritual — revista editorial independente, em português do Brasil. Preferimos o que dura, o que acalma a luz, o que não precisa anunciar a si mesmo.
+      </p>
+      <h2>Público e posicionamento</h2>
+      <p>
+        Quiet luxury sem teatro: leitores que escolhem matéria, peso e uso — não lançamento. O arquivo se organiza em <a href="/casa">Casa</a>, <a href="/corpo">Corpo</a> e <a href="/ritual">Ritual</a>. Não prometemos volume nem métrica; prometemos critério.
+      </p>
+      <h2>O que nunca fazemos</h2>
+      <ul>
+        <li>Ensaio pago disfarçado de editorial.</li>
+        <li>Vitrine permanente ou “loja parceira”.</li>
+        <li>Tabela pública, pacote ou prazo de resposta automático.</li>
+        <li>Promessa de colocação na capa ou no índice.</li>
+      </ul>
+      <p>A regra completa está em <a href="/etica">ética editorial</a>.</p>
+      <h2>O que uma marca pode enviar</h2>
+      <ul>
+        <li>Produto físico para ensaio — se couber no critério (matéria, calma, uso).</li>
+        <li>Matéria e contexto de fabricação: onde, como, por quem.</li>
+        <li>Foto honesta do objeto em uso, sem lifestyle forçado.</li>
+        <li>Nota curta: por que isso deveria ocupar um parágrafo nosso.</li>
+      </ul>
+      <p>Exemplo do tom que buscamos: <a href="/diario/ceramica-na-mesa">Cerâmica na mesa</a>.</p>
+      <h2>Como falar conosco</h2>
+      <p>
+        Escreva para <a href={`mailto:${SITE.email}`}>{SITE.email}</a>. Não há tabela nem fila automática. Há leitura.
+      </p>
+      <p><a class="btn" href={`mailto:${SITE.email}`}>Abrir e-mail</a></p>
+      <form action={`mailto:${SITE.email}`} method="post" enctype="text/plain" style="margin-top: 2rem; max-width: 28rem;">
+        <p class="muted">Ou prepare a mensagem com estes campos:</p>
+        <p>
+          <label for="marca">Marca</label><br />
+          <input type="text" id="marca" name="marca" required autocomplete="organization" />
+        </p>
+        <p>
+          <label for="site">Site ou referência</label><br />
+          <input type="text" id="site" name="site" autocomplete="url" />
+        </p>
+        <p>
+          <label for="mensagem">Nota</label><br />
+          <textarea id="mensagem" name="mensagem" required placeholder="O que fabricam, onde, e por que cabe na Lavi."></textarea>
+        </p>
+        <button type="submit">Abrir e-mail</button>
+      </form>
+    </article>
+  </div>
+</BaseLayout>

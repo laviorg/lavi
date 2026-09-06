@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SITE } from "../lib/site";
+---
+
+<BaseLayout
+  title="Sobre"
+  description="A Lavi escolhe pouco: casa, corpo e ritual. Uma editorial independente, sem vitrine permanente."
+>
+  <div class="wrap">
+    <article class="prose fade-in">
+      <p class="kicker">Casa editorial</p>
+      <h1 class="page-title">Sobre a Lavi</h1>
+      <p>Lavi é uma curadoria silenciosa de casa, corpo e ritual. Não é loja. Não é revista de lançamentos. É um arquivo pequeno de critérios.</p>
+      <p>
+        Escrevemos quando há o que dizer. Preferimos o objeto que permanece, a luz que não compete, o hábito que não precisa de aplicativo. O contrário do excesso que se disfarça de cuidado.
+      </p>
+      <p>O nome cabe na boca sem esforço. Não pedimos que o decore. Pedimos que a casa fique um pouco mais quieta.</p>
+      <h2>Como lemos o mundo</h2>
+      <p>
+        O arquivo se organiza em três seções: <a href="/casa">Casa</a>, <a href="/corpo">Corpo</a> e <a href="/ritual">Ritual</a>. Os ensaios se falam. Não há ordem obrigatória. O <a href="/diario">diário</a> guarda o conjunto; a <a href="/selecao">seleção</a> reúne os objetos que atravessaram o texto.
+      </p>
+      <p>
+        Quando indicamos um objeto, dizemos por quê. Alguns links são afiliados; a regra está em <a href="/etica">ética</a>. Marcas que queiram ser lidas com o mesmo critério encontram a porta em <a href="/para-marcas">para marcas</a>. O guia digital <a href="/guia">Casa com menos estímulo</a> reúne, em PDF, a síntese dos ensaios de casa — quando sair.
+      </p>
+      <p>Correspondência: <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.</p>
+    </article>
+  </div>
+</BaseLayout>

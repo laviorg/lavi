@@ -1,0 +1,105 @@
+---
+import "@fontsource/newsreader/400.css";
+import "@fontsource/newsreader/400-italic.css";
+import "@fontsource/newsreader/500.css";
+import "@fontsource/newsreader/600.css";
+import "@fontsource/source-sans-3/400.css";
+import "@fontsource/source-sans-3/500.css";
+import "@fontsource/source-sans-3/600.css";
+import "@fontsource-variable/source-sans-3";
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { SITE, absoluteUrl, orgJsonLd } from "../lib/site";
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogType?: "website" | "article";
+  ogImage?: string;
+  ogImageAlt?: string;
+  robots?: string;
+  jsonLd?: unknown;
+  current?: string;
+  flush?: boolean;
+  published?: Date;
+  modified?: Date;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  ogType = "website",
+  ogImage = "/images/og-home.jpg",
+  ogImageAlt = "Lavi — curadoria silenciosa de casa, corpo e ritual",
+  robots = "index,follow",
+  jsonLd,
+  current,
+  flush = false,
+  published,
+  modified,
+} = Astro.props;
+
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+const canonicalUrl = canonical ?? absoluteUrl(path);
+const imageUrl = absoluteUrl(ogImage);
+const fullTitle =
+  title === `${SITE.name} — ${SITE.tagline}` || title.endsWith(" — Lavi")
+    ? title
+    : `${title} — Lavi`;
+const ld = jsonLd ?? (ogType === "website" ? orgJsonLd() : undefined);
+---
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    {robots.includes("index") && (
+      <meta name="google-site-verification" content={SITE.verification} />
+    )}
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang="pt-BR" href={canonicalUrl} />
+    <link rel="alternate" hreflang="x-default" href={canonicalUrl} />
+    <meta name="robots" content={robots} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:locale" content={SITE.ogLocale} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
+    {published && (
+      <meta property="article:published_time" content={published.toISOString()} />
+    )}
+    {modified && (
+      <meta property="article:modified_time" content={modified.toISOString()} />
+    )}
+    <link rel="icon" href="/favicon.ico" sizes="32x32 48x48" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="alternate" type="application/rss+xml" title="Lavi" href="/rss.xml" />
+    {ld && <script type="application/ld+json" set:html={JSON.stringify(ld)} />}
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip" href="#conteudo">Ir ao conteúdo</a>
+    <Header current={current} />
+    <main id="conteudo" class={flush ? "main-flush" : undefined}>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

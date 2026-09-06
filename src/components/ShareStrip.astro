@@ -1,0 +1,51 @@
+---
+interface Props {
+  url: string;
+  title: string;
+}
+const { url, title } = Astro.props;
+const wa = `https://wa.me/?text=${encodeURIComponent(`${title} — ${url}`)}`;
+---
+
+<div class="share-strip" data-share data-url={url} data-title={title}>
+  <p class="kicker">Passar adiante</p>
+  <div class="share-strip__row">
+    <a class="share-btn" href={wa} rel="noopener noreferrer" target="_blank">WhatsApp</a>
+    <button type="button" class="share-btn" data-copy>Copiar link</button>
+    <button type="button" class="share-btn" data-native hidden>Compartilhar</button>
+  </div>
+  <p class="share-strip__ok" data-ok hidden>Link copiado.</p>
+</div>
+<script>
+  (function () {
+    var root = document.querySelector("[data-share]");
+    if (!root) return;
+    var url = root.getAttribute("data-url") || "";
+    var title = root.getAttribute("data-title") || "";
+    var copy = root.querySelector("[data-copy]");
+    var native = root.querySelector("[data-native]");
+    var ok = root.querySelector("[data-ok]");
+    if (native && navigator.share) {
+      native.hidden = false;
+      native.addEventListener("click", function () {
+        navigator.share({ title: title, url: url, text: title }).catch(function () {});
+      });
+    }
+    if (copy) {
+      copy.addEventListener("click", function () {
+        var done = function () {
+          if (!ok) return;
+          ok.hidden = false;
+          window.setTimeout(function () { ok.hidden = true; }, 1800);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(done).catch(function () {
+            window.prompt("Copie o link", url);
+          });
+        } else {
+          window.prompt("Copie o link", url);
+        }
+      });
+    }
+  })();
+</script>

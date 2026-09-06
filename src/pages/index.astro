@@ -1,0 +1,85 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Newsletter from "../components/Newsletter.astro";
+import { SITE, PILARES, essayPath, countLabel, sortByDateDesc, orgJsonLd } from "../lib/site";
+
+const essays = sortByDateDesc(await getCollection("diario"));
+const bySecao = {
+  casa: essays.filter((e) => e.data.secao === "casa").length,
+  corpo: essays.filter((e) => e.data.secao === "corpo").length,
+  ritual: essays.filter((e) => e.data.secao === "ritual").length,
+};
+const featured = essays.find((e) => e.id === "sabado-em-casa") ?? essays[0];
+const stack = ["ruido-que-a-casa-faz", "pia-do-banheiro"]
+  .map((id) => essays.find((e) => e.id === id))
+  .filter(Boolean);
+const cover = essays.find((e) => e.id === "quarto-sono") ?? essays[0];
+---
+
+<BaseLayout
+  title={`${SITE.name} — ${SITE.tagline}`}
+  description={SITE.description}
+  canonical={SITE.url}
+  ogImage="/images/og-home.jpg"
+  flush
+  jsonLd={orgJsonLd()}
+>
+  <section class="cover-split" aria-label="Abertura">
+    <div class="cover-split__panel">
+      <p class="volume">{SITE.volume}</p>
+      <h1 class="cover-split__manifesto">
+        Lavi é uma curadoria silenciosa de casa, corpo e ritual. Preferimos o que dura, o que acalma a luz da casa, o que não precisa anunciar a si mesmo.
+      </h1>
+      <p class="cover-split__secs">Casa · Corpo · Ritual</p>
+    </div>
+    <a class="cover-split__photo" href={essayPath(cover)}>
+      <img src={cover.data.hero} alt={cover.data.heroAlt} width="1800" height="1200" />
+    </a>
+  </section>
+  <div class="wrap">
+    <section aria-labelledby="pilares">
+      <p class="kicker" id="pilares">Explorar</p>
+      <nav class="pillar-nav" aria-label="Pilares da revista">
+        {PILARES.map((p) => (
+          <a class="pillar-card" href={p.href}>
+            <span class="pillar-card__label">{p.label}</span>
+            <span class="pillar-card__desc muted">{p.desc}</span>
+            <span class="pillar-card__count">{countLabel(bySecao[p.secao])}</span>
+          </a>
+        ))}
+      </nav>
+    </section>
+    <hr class="rule" />
+    <section aria-labelledby="indice">
+      <p class="kicker" id="indice">Neste volume</p>
+      <div class="mag">
+        <a class="mag__lead fade-in d1" href={essayPath(featured)}>
+          <img src={featured.data.hero} alt={featured.data.heroAlt} width="1200" height="800" />
+          <p class="kicker">{featured.data.secao === "casa" ? "Casa" : featured.data.secao === "corpo" ? "Corpo" : "Ritual"}</p>
+          <h2>{featured.data.title}</h2>
+          <p class="muted">{featured.data.description}</p>
+        </a>
+        <div class="mag__stack-col">
+          {stack.map((entry, i) => (
+            <a class={`mag__stack fade-in d${i + 2}`} href={essayPath(entry!)}>
+              <img src={entry!.data.hero} alt={entry!.data.heroAlt} width="900" height="600" loading="lazy" />
+              <p class="kicker">
+                {entry!.data.secao === "casa" ? "Casa" : entry!.data.secao === "corpo" ? "Corpo" : "Ritual"}
+              </p>
+              <h3>{entry!.data.title}</h3>
+            </a>
+          ))}
+        </div>
+      </div>
+      <p class="volume-more">
+        <a class="text-link" href="/diario">O diário completo</a>
+      </p>
+    </section>
+    <hr class="rule" />
+    <section aria-labelledby="cartas">
+      <h2 id="cartas" class="visually-hidden">Correspondência</h2>
+      <Newsletter />
+    </section>
+  </div>
+</BaseLayout>

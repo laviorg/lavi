@@ -1,0 +1,122 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  PILARES,
+  SECAO_LABEL,
+  EIXO_LABEL,
+  essayPath,
+  formatDate,
+  countLabel,
+  sortByDateDesc,
+  SITE,
+} from "../../lib/site";
+
+const essays = sortByDateDesc(await getCollection("diario"));
+const bySecao = {
+  casa: essays.filter((e) => e.data.secao === "casa").length,
+  corpo: essays.filter((e) => e.data.secao === "corpo").length,
+  ritual: essays.filter((e) => e.data.secao === "ritual").length,
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": `${SITE.url}/diario`,
+      name: "Diário",
+      description: "Ensaios da Lavi sobre casa, corpo e ritual. Leitura curta, critério longo.",
+      url: `${SITE.url}/diario`,
+      inLanguage: SITE.locale,
+      isPartOf: { "@id": `${SITE.url}/#website` },
+      mainEntity: { "@id": `${SITE.url}/diario#list` },
+    },
+    {
+      "@type": "ItemList",
+      "@id": `${SITE.url}/diario#list`,
+      numberOfItems: essays.length,
+      itemListElement: essays.map((e, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: e.data.title,
+        url: `${SITE.url}${essayPath(e)}`,
+      })),
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Lavi", item: SITE.url },
+        { "@type": "ListItem", position: 2, name: "Diário", item: `${SITE.url}/diario` },
+      ],
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title="Diário"
+  description="Ensaios da Lavi sobre casa, corpo e ritual. Leitura curta, critério longo."
+  current="/diario"
+  ogImage="/images/sabado-em-casa-og.jpg"
+  ogImageAlt="Apartamento brasileiro no sábado de manhã, café sem pressa, sem agenda na mesa, luz de janela."
+  jsonLd={jsonLd}
+>
+  <div class="wrap">
+    <div class="fade-in">
+      <p class="kicker">Arquivo</p>
+      <h1 class="page-title">Diário</h1>
+      <p class="intro">Notas editoriais em Casa, Corpo e Ritual. Cada texto permanece enquanto fizer sentido.</p>
+      <nav class="pillar-nav" aria-label="Pilares">
+        {PILARES.map((p) => (
+          <a class="pillar-card" href={p.href}>
+            <span class="pillar-card__label">{p.label}</span>
+            <span class="pillar-card__desc muted">{p.desc}</span>
+            <span class="pillar-card__count">{countLabel(bySecao[p.secao])}</span>
+          </a>
+        ))}
+      </nav>
+      <nav class="filter" aria-label="Filtrar por seção" data-filter-nav>
+        <a href="/diario" data-secao-filter aria-current="page">Todas</a>
+        <a href="/diario?secao=casa" data-secao-filter="casa">Casa</a>
+        <a href="/diario?secao=corpo" data-secao-filter="corpo">Corpo</a>
+        <a href="/diario?secao=ritual" data-secao-filter="ritual">Ritual</a>
+      </nav>
+      <div class="essay-list diary-grid" data-essay-list>
+        {essays.map((entry) => (
+          <a class="diary-card" href={essayPath(entry)} data-secao={entry.data.secao}>
+            <img src={entry.data.hero} alt={entry.data.heroAlt} width="900" height="600" loading="lazy" />
+            <div class="diary-card__body">
+              <p class="kicker">{SECAO_LABEL[entry.data.secao]} · {EIXO_LABEL[entry.data.eixo]}</p>
+              <h2>{entry.data.title}</h2>
+              <p class="muted">{entry.data.description}</p>
+              <time class="date" datetime={entry.data.date.toISOString()}>{formatDate(entry.data.date)}</time>
+            </div>
+          </a>
+        ))}
+      </div>
+      <p class="muted" data-empty hidden>Nenhum ensaio nesta seção.</p>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var params = new URLSearchParams(location.search);
+      var secao = params.get("secao") || "";
+      if (secao !== "casa" && secao !== "corpo" && secao !== "ritual") secao = "";
+      var cards = document.querySelectorAll("[data-secao]");
+      var n = 0;
+      cards.forEach(function (el) {
+        var show = !secao || el.getAttribute("data-secao") === secao;
+        el.hidden = !show;
+        if (show) n += 1;
+      });
+      var empty = document.querySelector("[data-empty]");
+      if (empty) empty.hidden = n > 0;
+      document.querySelectorAll("[data-secao-filter]").forEach(function (a) {
+        var key = a.getAttribute("data-secao-filter") || "";
+        if ((key && key === secao) || (!key && !secao)) a.setAttribute("aria-current", "page");
+        else a.removeAttribute("aria-current");
+      });
+    })();
+  </script>
+</BaseLayout>
