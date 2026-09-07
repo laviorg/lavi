@@ -1,5 +1,4 @@
 # Cloudflare Pages. Do not change DNS from this file.
-# Trailing slashes are stripped (live responds 308 → unsashed path).
-# Astro `trailingSlash: "never"` emits the same 308 at the origin.
-
-/*/ /:splat 308
+# HTTPS and the canonical apex (lavi.org) are handled by Cloudflare.
+# Do not add trailing-slash or www bounce rules — they loop with
+# directory-format URLs (`/casa` 308 → `/casa/` 308 → `/casa`).
