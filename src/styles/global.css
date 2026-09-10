@@ -18,10 +18,11 @@
   --rule:#e0d8cc;
   --max:70rem;
   --measure:38rem;
+  --gutter:1.4rem;
   --serif:"Newsreader", "Iowan Old Style", Palatino, Georgia, serif;
   --sans: "Source Sans 3", "Source Sans Pro", "Segoe UI", system-ui, sans-serif;
   --space:1.25rem;
-  --header-h:4.1rem;
+  --header-h:3.6rem;
   --photo: saturate(0.92) contrast(1.04);
 }
 *,:before,:after
@@ -95,7 +96,7 @@ p:last-child
 {
   flex-shrink:0;
   align-items:center;
-  padding:.15rem .1rem;
+  padding:0;
   line-height:0;
   text-decoration:none;
   display:inline-flex
@@ -117,77 +118,65 @@ p:last-child
   z-index:40;
   background:color-mix(in srgb, var(--ivory) 96%, transparent);
   border-bottom:1px solid var(--rule);
-  padding:1.15rem 1.4rem 1.05rem;
+  padding:.95rem var(--gutter);
   position:sticky;
   top:0
 }
 .header-inner,.footer-inner,.wrap
 {
   max-width:var(--max);
-  margin:0 auto
+  margin-inline:auto
 }
 .header-inner
 {
   justify-content:space-between;
   align-items:center;
-  gap:1.25rem;
+  flex-wrap:nowrap;
+  gap:1rem 1.25rem;
+  min-height:var(--header-h);
   display:flex
 }
 nav.primary
 {
-  flex-wrap:wrap;
+  flex-wrap:nowrap;
   align-items:center;
-  gap:1.15rem;
+  flex-shrink:0;
+  gap:.85rem 1.15rem;
   display:flex
 }
-@media (width<=720px)
+@media (width<720px)
 {
-  .site-header
-  {
-    padding:.95rem 1.1rem .85rem
-  }
   .header-inner
   {
-    flex-wrap:wrap;
-    align-items:center;
-    gap:.7rem .9rem
-  }
-  .wordmark
-  {
-    flex:1 0 auto
-  }
-  .wordmark img
-  {
-    height:1.55rem
+    gap:.65rem .85rem;
+    min-height:2.6rem
   }
   nav.primary
   {
-    flex:100%;
-    justify-content:space-between;
-    gap:.6rem;
-    width:100%
+    gap:.5rem .65rem
   }
-  .nav-links
+  .nav-links a
   {
-    flex:1;
-    justify-content:space-between
+    letter-spacing:.12em;
+    font-size:.64rem
   }
   .nav-links a+a:before
   {
-    margin:0 .35rem
+    margin:0 .4rem
   }
 }
 .nav-links
 {
-  flex-wrap:wrap;
+  flex-wrap:nowrap;
   align-items:center;
-  gap:.15rem 0;
+  gap:0;
   display:flex
 }
 .nav-links a
 {
   letter-spacing:.18em;
   text-transform:uppercase;
+  white-space:nowrap;
   color:var(--muted);
   font-size:.68rem;
   text-decoration:none
@@ -206,8 +195,9 @@ nav.primary
 .nav-search
 {
   color:var(--ink);
+  flex-shrink:0;
   align-items:center;
-  padding:.15rem;
+  padding:0;
   text-decoration:none;
   display:inline-flex
 }
@@ -217,7 +207,7 @@ nav.primary
 }
 main
 {
-  padding:2.5rem 1.4rem 4.5rem
+  padding:2.5rem var(--gutter) 4.5rem
 }
 main.main-flush
 {
@@ -225,7 +215,9 @@ main.main-flush
 }
 main.main-flush>.wrap
 {
-  padding:3.2rem 1.4rem 5rem
+  box-sizing:border-box;
+  width:calc(100% - 2 * var(--gutter));
+  padding:3.2rem 0 5rem
 }
 .cover-split
 {
@@ -238,7 +230,7 @@ main.main-flush>.wrap
   flex-direction:column;
   justify-content:space-between;
   gap:2.4rem;
-  padding:2rem 1.5rem 1.6rem;
+  padding:2rem var(--gutter) 1.6rem;
   display:flex
 }
 h1.cover-split__manifesto
@@ -267,10 +259,12 @@ h1.cover-split__manifesto
 .cover-split__photo
 {
   background:var(--night);
+  min-width:0;
   min-height:58vw;
   text-decoration:none;
   display:block;
-  position:relative
+  position:relative;
+  overflow:hidden
 }
 .cover-split__photo img
 {
@@ -297,12 +291,13 @@ h1.cover-split__manifesto
 {
   .cover-split
   {
-    grid-template-columns:minmax(17rem,.36fr) 1fr;
-    min-height:min(86vh,52rem)
+    grid-template-columns:minmax(15rem,22rem) 1fr;
+    min-height:min(86vh,52rem);
+    padding-left:max(var(--gutter), calc((100% - var(--max)) / 2))
   }
   .cover-split__panel
   {
-    padding:2.4rem 2rem 1.8rem
+    padding:2.4rem 2rem 1.8rem 0
   }
   .cover-split__photo
   {
@@ -372,7 +367,7 @@ h1.cover-split__manifesto
 img.photo,.featured img,.cover img,.card img,.secao-row img,.mag img
 {
   width:100%;
-  height:unset;
+  height:auto;
   aspect-ratio:3/2;
   object-fit:cover;
   object-position:center;
@@ -425,15 +420,21 @@ img.photo,.featured img,.cover img,.card img,.secao-row img,.mag img
 }
 .mag
 {
+  align-items:start;
   gap:2.2rem 1.8rem;
   display:grid
 }
 .mag__lead,.mag__stack
 {
   flex-direction:column;
-  gap:.85rem;
+  min-width:0;
+  gap:1rem;
   text-decoration:none;
   display:flex
+}
+.mag .kicker,.secao-row .kicker,.diary-card .kicker,.card .kicker,.featured .kicker
+{
+  margin:0
 }
 .mag__lead h2
 {
@@ -456,7 +457,7 @@ img.photo,.featured img,.cover img,.card img,.secao-row img,.mag img
   .mag
   {
     grid-template-columns:1.38fr .92fr;
-    align-items:stretch
+    align-items:start
   }
   .mag__lead img,.mag__stack img
   {
@@ -504,22 +505,30 @@ img.photo,.featured img,.cover img,.card img,.secao-row img,.mag img
 .secao-row
 {
   border-top:1px solid var(--rule);
+  align-items:start;
   gap:1.1rem 1.6rem;
   padding:1.7rem 0;
   text-decoration:none;
   display:grid
+}
+.secao-row>:not(img)
+{
+  flex-direction:column;
+  gap:.4rem;
+  min-width:0;
+  display:flex
 }
 @media (width>=720px)
 {
   .secao-row
   {
     grid-template-columns:minmax(12rem,18rem) 1fr;
-    align-items:center
+    align-items:start
   }
 }
 .secao-row h2
 {
-  margin:0 0 .4rem;
+  margin:0;
   font-size:clamp(1.3rem,2vw,1.7rem)
 }
 .filter
@@ -561,6 +570,10 @@ img.photo,.featured img,.cover img,.card img,.secao-row img,.mag img
 {
   max-width:var(--measure);
   margin-inline:auto
+}
+.essay-head.prose,.essay-body.prose
+{
+  margin-inline:0
 }
 .prose h1
 {
@@ -710,7 +723,7 @@ img.photo,.featured img,.cover img,.card img,.secao-row img,.mag img
 {
   max-width:var(--measure);
   border-top:1px solid var(--rule);
-  margin:2.6rem auto 0;
+  margin:2.6rem 0 0;
   padding:1.5rem 0 .2rem
 }
 .next-read__card
@@ -890,7 +903,7 @@ button:hover,.btn:hover
 {
   border-top:1px solid var(--rule);
   color:var(--muted);
-  padding:2rem 1.4rem 2.6rem;
+  padding:2rem var(--gutter) 2.6rem;
   font-size:.88rem
 }
 .footer-inner
@@ -1013,25 +1026,30 @@ form label
 }
 @media (width>=720px)
 {
+  :root
+  {
+    --gutter:2rem;
+    --header-h:3.7rem
+  }
   .hero
   {
     padding:3.2rem 0 3.4rem
   }
   .site-header
   {
-    padding:1.25rem 2rem 1.15rem
+    padding:1.1rem var(--gutter)
   }
   main
   {
-    padding:3rem 2rem 5.5rem
+    padding:3rem var(--gutter) 5.5rem
   }
   main.main-flush>.wrap
   {
-    padding:3.6rem 2rem 6rem
+    padding:3.6rem 0 6rem
   }
   .site-footer
   {
-    padding:2.2rem 2rem 3rem
+    padding:2.2rem var(--gutter) 3rem
   }
 }
 .pillar-nav
@@ -1152,7 +1170,8 @@ form label
 {
   border-top:0;
   flex-direction:column;
-  gap:.85rem;
+  min-width:0;
+  gap:1rem;
   padding:0;
   text-decoration:none;
   display:flex
