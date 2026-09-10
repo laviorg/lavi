@@ -221,7 +221,6 @@ main.main-flush>.wrap
 }
 .cover-split
 {
-  --cover-inline:max(var(--gutter), calc((100% - var(--max)) / 2));
   background:var(--ivory);
   min-height:min(78vh,46rem);
   display:grid
@@ -292,13 +291,13 @@ h1.cover-split__manifesto
 {
   .cover-split
   {
-    grid-template-columns:minmax(17rem,calc(var(--cover-inline) + min(var(--max), 100%) * .36)) 1fr;
-    min-height:min(86vh,52rem)
+    grid-template-columns:minmax(15rem,22rem) 1fr;
+    min-height:min(86vh,52rem);
+    padding-left:max(var(--gutter), calc((100% - var(--max)) / 2))
   }
   .cover-split__panel
   {
-    padding:2.4rem 2rem 1.8rem;
-    padding-left:var(--cover-inline)
+    padding:2.4rem 2rem 1.8rem 0
   }
   .cover-split__photo
   {
