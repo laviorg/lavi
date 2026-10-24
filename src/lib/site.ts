@@ -181,3 +181,67 @@ export function absoluteUrl(path: string): string {
   if (!path || path === "/") return SITE.url;
   return `${SITE.url}${path.startsWith("/") ? path : `/${path}`}`;
 }
+
+/** Quiet home strip: one peça per essay, newest first. */
+export function selecaoStripItems(essays: Essay[], limit = 6) {
+  const items: {
+    title: string;
+    query: string;
+    reason: string;
+    essayTitle: string;
+    essayHref: string;
+  }[] = [];
+  const seen = new Set<string>();
+  for (const entry of sortByDateDesc(essays)) {
+    const first = (entry.data.selecao ?? []).find((item) => {
+      const key = item.query.toLowerCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+    if (!first) continue;
+    items.push({
+      title: first.title,
+      query: first.query,
+      reason: first.reason,
+      essayTitle: entry.data.title,
+      essayHref: essayPath(entry),
+    });
+    if (items.length >= limit) return items;
+  }
+  return items;
+}
+
+/** Peças from same eixo (then secao), excluding the current essay. */
+export function relatedPecas(entry: Essay, all: Essay[], limit = 3) {
+  const ownQueries = new Set((entry.data.selecao ?? []).map((i) => i.query.toLowerCase()));
+  const fromEixo = sortByDateDesc(all.filter((e) => e.id !== entry.id && e.data.eixo === entry.data.eixo));
+  const fromSecao = sortByDateDesc(
+    all.filter((e) => e.id !== entry.id && e.data.secao === entry.data.secao && e.data.eixo !== entry.data.eixo),
+  );
+  const pool = [...fromEixo, ...fromSecao];
+  const out: {
+    title: string;
+    query: string;
+    reason: string;
+    essayTitle: string;
+    essayHref: string;
+  }[] = [];
+  const seen = new Set<string>();
+  for (const e of pool) {
+    for (const item of e.data.selecao ?? []) {
+      const key = item.query.toLowerCase();
+      if (ownQueries.has(key) || seen.has(key)) continue;
+      seen.add(key);
+      out.push({
+        title: item.title,
+        query: item.query,
+        reason: item.reason,
+        essayTitle: e.data.title,
+        essayHref: essayPath(e),
+      });
+      if (out.length >= limit) return out;
+    }
+  }
+  return out;
+}

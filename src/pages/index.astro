@@ -2,7 +2,8 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Newsletter from "../components/Newsletter.astro";
-import { SITE, PILARES, SECAO_LABEL, essayPath, countLabel, sortByDateDesc, orgJsonLd } from "../lib/site";
+import SelecaoStrip from "../components/SelecaoStrip.astro";
+import { SITE, PILARES, SECAO_LABEL, essayPath, countLabel, sortByDateDesc, orgJsonLd, selecaoStripItems } from "../lib/site";
 
 const essays = sortByDateDesc(await getCollection("diario"));
 const bySecao = {
@@ -16,6 +17,7 @@ const stack = ["ruido-que-a-casa-faz", "pia-do-banheiro"]
   .filter(Boolean);
 const cover = essays.find((e) => e.id === "quarto-sono") ?? essays[0];
 const recent = essays.slice(0, 6);
+const strip = selecaoStripItems(essays, 6);
 ---
 
 <BaseLayout
@@ -89,6 +91,8 @@ const recent = essays.slice(0, 6);
         </div>
       </div>
     </section>
+    <hr class="rule" />
+    <SelecaoStrip items={strip} />
     <hr class="rule" />
     <section aria-labelledby="cartas">
       <h2 id="cartas" class="visually-hidden">Correspondência</h2>

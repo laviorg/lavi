@@ -4,6 +4,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Newsletter from "../../components/Newsletter.astro";
 import ShareStrip from "../../components/ShareStrip.astro";
 import SelecaoBlock from "../../components/SelecaoBlock.astro";
+import EssayContinue from "../../components/EssayContinue.astro";
 import {
   SITE,
   SECAO_LABEL,
@@ -13,6 +14,7 @@ import {
   readingMinutes,
   nextInSecao,
   relatedEssays,
+  relatedPecas,
   absoluteUrl,
 } from "../../lib/site";
 
@@ -30,6 +32,7 @@ const words = (entry.body ?? "").trim().split(/\s+/).filter(Boolean).length;
 const minutes = readingMinutes(words);
 const next = nextInSecao(entry, essays);
 const related = relatedEssays(entry, essays, next);
+const pecas = relatedPecas(entry, essays, 3);
 const url = absoluteUrl(essayPath(entry));
 const secaoHref = `/${entry.data.secao}`;
 const heroBase = entry.data.hero.replace(/\.jpg$/, "");
@@ -140,6 +143,7 @@ const jsonLd = {
         ))}
       </ul>
     </nav>
+    <EssayContinue secao={entry.data.secao} eixo={entry.data.eixo} pecas={pecas} />
     <hr class="rule" />
     <Newsletter />
     <script>
