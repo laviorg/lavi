@@ -16,16 +16,18 @@ const all = sortByDateDesc(await getCollection("diario"));
 /** Vol. 02 opens with October 2026 pieces (cortina onward) plus the living archive around them. */
 const vol02Start = new Date("2026-10-01T00:00:00.000Z");
 const vol02 = all.filter((e) => e.data.date.getTime() >= vol02Start.getTime());
-const featured = vol02.slice(0, 8);
+const featured = vol02; // full Vol. 02 index
 const hubs = [
   { href: "/casa", label: "Casa", desc: "Luz, tecido, superfície, cômodo." },
-  { href: "/corpo", label: "Corpo", desc: "Banho, óleo, roupão — soft, sem clínica." },
+  { href: "/corpo", label: "Corpo", desc: "Banho, sono, movimento — soft, sem clínica." },
+  { href: "/corpo/banho", label: "Banho", desc: "Temperatura, óleo, roupão." },
+  { href: "/corpo/sono", label: "Sono e chão", desc: "Travesseiro, quarto, tapete." },
   { href: "/ritual", label: "Ritual", desc: "Gestos sem app: mesa, manhã, silêncio." },
   { href: "/selecao", label: "Seleção", desc: "Peças que atravessaram o texto." },
 ];
 
 const description =
-  "Vol. 02 — Outubro: o que a casa pede quando o estímulo sobe. Índice editorial da Lavi — ensaios recentes, cômodos e pilares.";
+  "Vol. 02 — Outubro a dezembro: o que a casa pede quando o estímulo sobe. Índice completo do calendário quiet living — ensaios, cômodos e pilares.";
 const ogImage = vol02[0]?.data.ogImage ?? "/images/og-home.jpg";
 
 const jsonLd = {
@@ -64,7 +66,7 @@ const jsonLd = {
       <p class="kicker">Volume</p>
       <h1 class="page-title">{SITE.volume02}</h1>
       <p class="intro">
-        O Vol. 01 fechou o que a casa já sabia dizer em voz baixa. O Vol. 02 abre o que ela pede quando o estímulo sobe — calor de fim de ano, tela na mesa, janela que não desliga sozinha. Continua o mesmo critério: matéria, gesto, apartamento brasileiro. Sem vitrine. Sem pressa.
+        O Vol. 01 fechou o que a casa já sabia dizer em voz baixa. O Vol. 02 — outubro a dezembro — é o calendário de oito semanas: calor, ventilador, lavanderia, Natal sem roteiro. Continua o mesmo critério: matéria, gesto, apartamento brasileiro. Sem vitrine. Sem pressa. Calendário editorial completo neste índice.
       </p>
       <p>
         Este índice não é manifesto longo. É porta. Ensaios que já estão no ar, cômodos onde a casa acontece, pilares para quem chega agora.

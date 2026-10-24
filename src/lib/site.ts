@@ -15,7 +15,7 @@ export const SITE = {
   hotmart: "https://pay.hotmart.com/A107491664G",
   year: 2026,
   volume: "Vol. 01 — Setembro",
-  volume02: "Vol. 02 — Outubro",
+  volume02: "Vol. 02 — Outubro–Dezembro",
 } as const;
 
 export const SECAO_LABEL = {
@@ -133,6 +133,7 @@ export const COMODOS: Record<
       "travesseiro-que-nao-anuncia",
       "mesa-de-cabeceira-um-plano",
       "ventilador-que-nao-vira-movel",
+      "chao-descalco",
     ],
     eixos: ["luz", "textil", "silencio"],
   },
@@ -158,6 +159,8 @@ export const COMODOS: Record<
       "ceramica-na-mesa",
       "mesa-que-nao-recebe-o-celular",
       "quinze-minutos-na-bancada",
+      "fechar-a-cozinha-a-noite",
+      "natal-em-casa-sem-roteiro",
     ],
     eixos: ["mesa", "silencio", "manha"],
   },
@@ -190,10 +193,68 @@ export const COMODOS: Record<
       "ruido-que-a-casa-faz",
       "vol-02-casa-quando-o-calor-sobe",
       "ventilador-que-nao-vira-movel",
+      "parede-que-nao-pede-quadro",
+      "natal-em-casa-sem-roteiro",
     ],
     eixos: ["silencio", "textil", "luz"],
   },
 } as const;
+
+
+/** Soft-body paths under /corpo/{hub} — discoverable, no clinical wellness. */
+export const CORPO_SOFT_IDS = ["banho", "sono"] as const;
+export type CorpoSoft = (typeof CORPO_SOFT_IDS)[number];
+
+export const CORPO_SOFT: Record<
+  CorpoSoft,
+  {
+    label: string;
+    href: string;
+    blurb: string;
+    intro: string;
+    ogEssay: string;
+    essayIds: readonly string[];
+    eixos: readonly Eixo[];
+  }
+> = {
+  banho: {
+    label: "Banho",
+    href: "/corpo/banho",
+    blurb: "Temperatura, óleo, roupão — o intervalo sem spa de prateleira.",
+    intro:
+      "Banho como ritual doméstico: água na temperatura certa, um sabonete, uma toalha, o óleo depois. Corpo soft sem clínica e sem kit de oito steps.",
+    ogEssay: "agua-do-banho-temperatura",
+    essayIds: [
+      "agua-do-banho-temperatura",
+      "oleo-corporal",
+      "o-peso-de-um-bom-roupao",
+      "pia-do-banheiro",
+    ],
+    eixos: ["banho"],
+  },
+  sono: {
+    label: "Sono e chão",
+    href: "/corpo/sono",
+    blurb: "Travesseiro, quarto, tapete baixo — o corpo na noite sem placar.",
+    intro:
+      "O corpo soft também dorme e pisa. Aqui: travesseiro sem anúncio, quarto com menos estímulo, o chão descalço — movimento leve no quarteirão quando couber.",
+    ogEssay: "travesseiro-que-nao-anuncia",
+    essayIds: [
+      "travesseiro-que-nao-anuncia",
+      "quarto-sono",
+      "noite-sem-retangulo",
+      "chao-descalco",
+      "caminhada-no-quarteirao",
+      "mesa-de-cabeceira-um-plano",
+    ],
+    eixos: ["textil", "luz", "manha"],
+  },
+} as const;
+
+export function essaysForCorpoSoft(hub: CorpoSoft, all: Essay[]): Essay[] {
+  const ids = new Set(CORPO_SOFT[hub].essayIds);
+  return sortByDateDesc(all.filter((e) => ids.has(e.id)));
+}
 
 export function comodoPath(comodo: Comodo): string {
   return COMODOS[comodo].href;
