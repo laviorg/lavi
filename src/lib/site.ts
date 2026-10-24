@@ -101,7 +101,7 @@ export const HUBS = {
   },
 } as const;
 
-export const COMODO_IDS = ["quarto", "banheiro", "cozinha"] as const;
+export const COMODO_IDS = ["quarto", "banheiro", "cozinha", "lavanderia"] as const;
 export type Comodo = (typeof COMODO_IDS)[number];
 
 /** Room hubs under /casa/{comodo} — curated essay ids + related eixos. */
@@ -158,6 +158,21 @@ export const COMODOS: Record<
       "quinze-minutos-na-bancada",
     ],
     eixos: ["mesa", "silencio", "manha"],
+  },
+  lavanderia: {
+    label: "Lavanderia",
+    href: "/casa/lavanderia",
+    blurb: "Cesto com tampa, varal que some, o corredor de volta a ser passagem.",
+    intro:
+      "Em apartamento brasileiro a lavanderia quase nunca é cômodo — é vão. Aqui o critério é sumir do corredor: tampa opaca, varal que dobra, um de cada produto, sem organizer de vitrine.",
+    ogEssay: "lavanderia-que-some-do-corredor",
+    essayIds: [
+      "lavanderia-que-some-do-corredor",
+      "cesto-que-segura-a-casa",
+      "armario-pequeno-e-caro",
+      "pia-do-banheiro",
+    ],
+    eixos: ["armario", "banho"],
   },
 } as const;
 
