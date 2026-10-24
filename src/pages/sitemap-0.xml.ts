@@ -33,6 +33,7 @@ export const GET: APIRoute = async () => {
     { loc: `${SITE.url}/volume/02`, lastmod: isoDay(latest) },
     { loc: `${SITE.url}/volume/03`, lastmod: isoDay(latest) },
     { loc: `${SITE.url}/volume/04`, lastmod: isoDay(latest) },
+    { loc: `${SITE.url}/volume/05`, lastmod: isoDay(latest) },
     ...CORPO_SOFT_IDS.map((id) => ({
       loc: `${SITE.url}${CORPO_SOFT[id].href}`,
       lastmod: isoDay(
