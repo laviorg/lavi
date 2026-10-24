@@ -1423,3 +1423,72 @@ a.axis-card:hover .axis-card__label
   text-decoration:underline !important;
   text-underline-offset:.12em
 }
+.comodo-row
+{
+  gap:.85rem;
+  margin-top:1rem;
+  display:grid
+}
+@media (width>=700px)
+{
+  .comodo-row
+  {
+    grid-template-columns:repeat(3,1fr)
+  }
+}
+.comodo-chip
+{
+  border:1px solid var(--rule);
+  flex-direction:column;
+  gap:.35rem;
+  padding:1rem 1.05rem;
+  text-decoration:none;
+  display:flex
+}
+.comodo-chip:hover
+{
+  border-color:var(--clay)
+}
+.comodo-chip__label
+{
+  font-family:var(--serif);
+  color:var(--charcoal);
+  font-size:1.25rem
+}
+.comodo-chip:hover .comodo-chip__label
+{
+  color:var(--bronze)
+}
+.comodo-chip__blurb
+{
+  font-size:.9rem;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden
+}
+.comodo-chip__count
+{
+  font-family:var(--sans);
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-top:.25rem;
+  font-size:.62rem
+}
+.comodo-siblings
+{
+  border-top:1px solid var(--rule);
+  margin-top:2.4rem;
+  padding-top:1.4rem
+}
+.comodo-siblings .comodo-row
+{
+  list-style:none;
+  margin:.85rem 0 0;
+  padding:0
+}
+.comodo-pecas
+{
+  margin-top:2.6rem
+}

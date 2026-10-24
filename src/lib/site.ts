@@ -15,6 +15,7 @@ export const SITE = {
   hotmart: "https://pay.hotmart.com/A107491664G",
   year: 2026,
   volume: "Vol. 01 — Setembro",
+  volume02: "Vol. 02 — Outubro",
 } as const;
 
 export const SECAO_LABEL = {
@@ -99,6 +100,126 @@ export const HUBS = {
     ],
   },
 } as const;
+
+export const COMODO_IDS = ["quarto", "banheiro", "cozinha"] as const;
+export type Comodo = (typeof COMODO_IDS)[number];
+
+/** Room hubs under /casa/{comodo} — curated essay ids + related eixos. */
+export const COMODOS: Record<
+  Comodo,
+  {
+    label: string;
+    href: string;
+    blurb: string;
+    intro: string;
+    ogEssay: string;
+    essayIds: readonly string[];
+    eixos: readonly Eixo[];
+  }
+> = {
+  quarto: {
+    label: "Quarto",
+    href: "/casa/quarto",
+    blurb: "Luz que corta, tecido que respira, a noite sem retângulo.",
+    intro:
+      "O quarto brasileiro quase nunca foi desenhado para dormir. Foi desenhado para caber. Aqui reunimos o que devolve ao cômodo a hora da noite: cortina, lâmpada quente, linho, menos estímulo na cabeceira.",
+    ogEssay: "quarto-sono",
+    essayIds: [
+      "quarto-sono",
+      "cortina-que-corta-o-dia",
+      "cama-linho-vs-algodao",
+      "luz-nao-habito",
+      "noite-sem-retangulo",
+    ],
+    eixos: ["luz", "textil", "silencio"],
+  },
+  banheiro: {
+    label: "Banheiro",
+    href: "/casa/banheiro",
+    blurb: "Pia que pede pouco, óleo, roupão — banho sem spa de prateleira.",
+    intro:
+      "O banheiro de apartamento não precisa de hotel boutique. Precisa de superfície, um sabão, um roupão com peso certo. Corpo soft sem medicalizar: o intervalo entre a água e a roupa.",
+    ogEssay: "pia-do-banheiro",
+    essayIds: ["pia-do-banheiro", "oleo-corporal", "o-peso-de-um-bom-roupao"],
+    eixos: ["banho"],
+  },
+  cozinha: {
+    label: "Cozinha",
+    href: "/casa/cozinha",
+    blurb: "Bancada que pede pouco, grés na mesa, o jantar sem tablescape.",
+    intro:
+      "A cozinha quieta não é open concept de revista. É bancada que aguenta o dia, uma tábua, uma tigela de grés. Menos aparelho à vista. Mais uso.",
+    ogEssay: "bancada-que-pede-pouco",
+    essayIds: ["bancada-que-pede-pouco", "ceramica-na-mesa"],
+    eixos: ["mesa"],
+  },
+} as const;
+
+export function comodoPath(comodo: Comodo): string {
+  return COMODOS[comodo].href;
+}
+
+export function essaysForComodo(comodo: Comodo, all: Essay[]): Essay[] {
+  const ids = new Set(COMODOS[comodo].essayIds);
+  return sortByDateDesc(all.filter((e) => ids.has(e.id)));
+}
+
+export function pecasForComodo(comodo: Comodo, all: Essay[], limit = 6) {
+  const essays = essaysForComodo(comodo, all);
+  const out: {
+    title: string;
+    query: string;
+    reason: string;
+    essayTitle: string;
+    essayHref: string;
+  }[] = [];
+  const seen = new Set<string>();
+  for (const entry of essays) {
+    for (const item of entry.data.selecao ?? []) {
+      const key = item.query.toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push({
+        title: item.title,
+        query: item.query,
+        reason: item.reason,
+        essayTitle: entry.data.title,
+        essayHref: essayPath(entry),
+      });
+      if (out.length >= limit) return out;
+    }
+  }
+  return out;
+}
+
+export function allSelecaoItems(essays: Essay[]) {
+  const out: {
+    title: string;
+    query: string;
+    reason: string;
+    essayTitle: string;
+    essayHref: string;
+    secao: Secao;
+  }[] = [];
+  const seen = new Set<string>();
+  for (const entry of sortByDateDesc(essays)) {
+    for (const item of entry.data.selecao ?? []) {
+      const key = item.query.toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push({
+        title: item.title,
+        query: item.query,
+        reason: item.reason,
+        essayTitle: entry.data.title,
+        essayHref: essayPath(entry),
+        secao: entry.data.secao,
+      });
+    }
+  }
+  return out;
+}
+
 
 export function essayPath(entry: Essay): string {
   return `/diario/${entry.id}`;

@@ -1,10 +1,14 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { HUBS, EIXO_LABEL, essayPath, formatDate, countLabel, sortByDateDesc } from "../lib/site";
+import { HUBS, COMODOS, COMODO_IDS, EIXO_LABEL, essayPath, formatDate, countLabel, sortByDateDesc, essaysForComodo } from "../lib/site";
 
 const hub = HUBS.casa;
-const essays = sortByDateDesc((await getCollection("diario")).filter((e) => e.data.secao === "casa"));
+const allEssays = await getCollection("diario");
+const essays = sortByDateDesc(allEssays.filter((e) => e.data.secao === "casa"));
+const comodoCounts = Object.fromEntries(
+  COMODO_IDS.map((id) => [id, essaysForComodo(id, allEssays).length]),
+);
 const axisCounts = Object.fromEntries(
   hub.axes.map((a) => [a.eixo, essays.filter((e) => e.data.eixo === a.eixo).length]),
 );
@@ -21,6 +25,20 @@ const axisCounts = Object.fromEntries(
       <p class="kicker">{hub.kicker}</p>
       <h1 class="page-title">{hub.title}</h1>
       <p class="intro">{hub.intro}</p>
+      <section class="hub-axes" aria-label="Cômodos">
+        <p class="kicker">Por cômodo</p>
+        <ul class="axis-grid">
+          {COMODO_IDS.map((id) => (
+            <li>
+              <a class="axis-card" href={COMODOS[id].href}>
+                <span class="axis-card__label">{COMODOS[id].label}</span>
+                <span class="axis-card__blurb muted">{COMODOS[id].blurb}</span>
+                <span class="axis-card__count">{countLabel(comodoCounts[id] ?? 0)}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
       <section class="hub-axes" aria-label="Eixos de Casa">
         <p class="kicker">Neste hub</p>
         <ul class="axis-grid">
