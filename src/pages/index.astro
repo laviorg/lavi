@@ -33,7 +33,7 @@ const comodoCounts = Object.fromEntries(
 >
   <section class="cover-split" aria-label="Abertura">
     <div class="cover-split__panel">
-      <p class="volume">{SITE.volume}</p>
+      <p class="volume"><a class="volume-link" href="/volume/02">{SITE.volume02}</a> · arquivo {SITE.volume}</p>
       <h1 class="cover-split__manifesto">
         Lavi é uma curadoria silenciosa de casa, corpo e ritual. Preferimos o que dura, o que acalma a luz da casa, o que não precisa anunciar a si mesmo.
       </h1>
@@ -71,7 +71,10 @@ const comodoCounts = Object.fromEntries(
     </section>
     <hr class="rule" />
     <section aria-labelledby="recentes">
-      <p class="kicker" id="recentes">Mais recentes · {SITE.volume02}</p>
+      <div class="selecao-strip__head">
+        <p class="kicker" id="recentes">Mais recentes · {SITE.volume02}</p>
+        <a class="text-link" href="/volume/02">Índice do volume</a>
+      </div>
       <div class="recent-row">
         {recent.map((entry) => (
           <a class="recent-card" href={essayPath(entry)}>

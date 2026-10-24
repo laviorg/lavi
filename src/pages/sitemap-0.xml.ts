@@ -30,6 +30,7 @@ export const GET: APIRoute = async () => {
     { loc: `${SITE.url}/para-marcas`, lastmod: isoDay(latest) },
     { loc: `${SITE.url}/selecao`, lastmod: isoDay(latest) },
     { loc: `${SITE.url}/sobre`, lastmod: isoDay(latest) },
+    { loc: `${SITE.url}/volume/02`, lastmod: isoDay(latest) },
     ...EIXOS.map((eixo) => ({
       loc: `${SITE.url}/eixo/${eixo}`,
       lastmod: isoDay(essays.find((e) => e.data.eixo === eixo)?.data.date ?? latest),
