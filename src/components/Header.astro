@@ -19,7 +19,29 @@ const links = [
 <header class="site-header">
   <div class="header-inner">
     <Wordmark />
-    <nav class="primary" aria-label="Principal">
+    <div class="header-tools">
+      <a class="nav-search" href="/buscar" aria-label="Buscar">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <circle cx="7" cy="7" r="4.25" stroke="currentColor" stroke-width="1.25"></circle>
+          <path d="M10.2 10.2 13.25 13.25" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"></path>
+        </svg>
+      </a>
+      <button
+        type="button"
+        class="nav-toggle"
+        id="nav-toggle"
+        aria-controls="primary-nav"
+        aria-expanded="false"
+        aria-label="Abrir menu"
+      >
+        <span class="nav-toggle__bars" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </button>
+    </div>
+    <nav class="primary" id="primary-nav" aria-label="Principal">
       <div class="nav-links">
         {links.map((link) => (
           <a href={link.href} aria-current={current === link.href ? "page" : undefined}>
@@ -27,7 +49,7 @@ const links = [
           </a>
         ))}
       </div>
-      <a class="nav-search" href="/buscar" aria-label="Buscar">
+      <a class="nav-search nav-search--desktop" href="/buscar" aria-label="Buscar">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
           <circle cx="7" cy="7" r="4.25" stroke="currentColor" stroke-width="1.25"></circle>
           <path d="M10.2 10.2 13.25 13.25" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"></path>
@@ -36,3 +58,50 @@ const links = [
     </nav>
   </div>
 </header>
+
+<script>
+  function initNav() {
+    const toggle = document.getElementById("nav-toggle");
+    const nav = document.getElementById("primary-nav");
+    const header = document.querySelector(".site-header");
+    if (!toggle || !nav || !header) return;
+
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      toggle.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
+      header.classList.toggle("is-nav-open", open);
+      document.body.classList.toggle("nav-open", open);
+    };
+
+    toggle.addEventListener("click", () => {
+      const open = toggle.getAttribute("aria-expanded") !== "true";
+      setOpen(open);
+      if (open) {
+        const first = nav.querySelector<HTMLElement>(".nav-links a");
+        first?.focus();
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+
+    // Close after navigating (same-page feel on soft nav)
+    nav.querySelectorAll("a").forEach((a) => {
+      a.addEventListener("click", () => setOpen(false));
+    });
+
+    // If resized to desktop, force closed
+    const mq = window.matchMedia("(min-width: 721px)");
+    const onMq = () => {
+      if (mq.matches) setOpen(false);
+    };
+    mq.addEventListener?.("change", onMq);
+  }
+
+  initNav();
+  document.addEventListener("astro:page-load", initNav);
+</script>
