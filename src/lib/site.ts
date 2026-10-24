@@ -16,6 +16,7 @@ export const SITE = {
   year: 2026,
   volume: "Vol. 01 — Setembro",
   volume02: "Vol. 02 — Outubro–Dezembro",
+  volume03: "Vol. 03 — Janeiro–Fevereiro",
 } as const;
 
 export const SECAO_LABEL = {
@@ -144,7 +145,7 @@ export const COMODOS: Record<
     intro:
       "O banheiro de apartamento não precisa de hotel boutique. Precisa de superfície, um sabão, um roupão com peso certo. Corpo soft sem medicalizar: o intervalo entre a água e a roupa.",
     ogEssay: "pia-do-banheiro",
-    essayIds: ["pia-do-banheiro", "oleo-corporal", "o-peso-de-um-bom-roupao", "agua-do-banho-temperatura"],
+    essayIds: ["pia-do-banheiro", "oleo-corporal", "o-peso-de-um-bom-roupao", "agua-do-banho-temperatura", "prateleira-do-banho-com-pouco"],
     eixos: ["banho"],
   },
   cozinha: {
@@ -195,6 +196,7 @@ export const COMODOS: Record<
       "ventilador-que-nao-vira-movel",
       "parede-que-nao-pede-quadro",
       "natal-em-casa-sem-roteiro",
+      "gancho-da-volta",
     ],
     eixos: ["silencio", "textil", "luz"],
   },
@@ -229,6 +231,7 @@ export const CORPO_SOFT: Record<
       "oleo-corporal",
       "o-peso-de-um-bom-roupao",
       "pia-do-banheiro",
+      "prateleira-do-banho-com-pouco",
     ],
     eixos: ["banho"],
   },
