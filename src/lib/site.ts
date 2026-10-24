@@ -101,7 +101,7 @@ export const HUBS = {
   },
 } as const;
 
-export const COMODO_IDS = ["quarto", "banheiro", "cozinha", "lavanderia"] as const;
+export const COMODO_IDS = ["quarto", "banheiro", "cozinha", "lavanderia", "sala"] as const;
 export type Comodo = (typeof COMODO_IDS)[number];
 
 /** Room hubs under /casa/{comodo} — curated essay ids + related eixos. */
@@ -131,6 +131,8 @@ export const COMODOS: Record<
       "luz-nao-habito",
       "noite-sem-retangulo",
       "travesseiro-que-nao-anuncia",
+      "mesa-de-cabeceira-um-plano",
+      "ventilador-que-nao-vira-movel",
     ],
     eixos: ["luz", "textil", "silencio"],
   },
@@ -141,7 +143,7 @@ export const COMODOS: Record<
     intro:
       "O banheiro de apartamento não precisa de hotel boutique. Precisa de superfície, um sabão, um roupão com peso certo. Corpo soft sem medicalizar: o intervalo entre a água e a roupa.",
     ogEssay: "pia-do-banheiro",
-    essayIds: ["pia-do-banheiro", "oleo-corporal", "o-peso-de-um-bom-roupao"],
+    essayIds: ["pia-do-banheiro", "oleo-corporal", "o-peso-de-um-bom-roupao", "agua-do-banho-temperatura"],
     eixos: ["banho"],
   },
   cozinha: {
@@ -173,6 +175,23 @@ export const COMODOS: Record<
       "pia-do-banheiro",
     ],
     eixos: ["armario", "banho"],
+  },
+  sala: {
+    label: "Sala",
+    href: "/casa/sala",
+    blurb: "Uma manta, um cesto, silêncio visual — a sala sem tablescape.",
+    intro:
+      "A sala brasileira acumula throws, controles e telas. Aqui o critério é subtração: uma manta, um cesto opaco, menos estímulo — o mesmo tom do silêncio na sala e do Vol. 02 no calor.",
+    ogEssay: "manta-que-a-sala-pede",
+    essayIds: [
+      "silencio-na-sala",
+      "manta-que-a-sala-pede",
+      "cesto-que-segura-a-casa",
+      "ruido-que-a-casa-faz",
+      "vol-02-casa-quando-o-calor-sobe",
+      "ventilador-que-nao-vira-movel",
+    ],
+    eixos: ["silencio", "textil", "luz"],
   },
 } as const;
 
