@@ -1,13 +1,82 @@
-<form class="newsletter" action="/obrigado" method="get">
+---
+/** Capture path: GET /obrigado (mailto confirm). Buttondown/etc. only when PUBLIC_BUTTONDOWN_USER is set at build. */
+const buttondownUser = import.meta.env.PUBLIC_BUTTONDOWN_USER?.trim() ?? "";
+const useButtondown = Boolean(buttondownUser);
+const action = useButtondown
+  ? `https://buttondown.email/api/emails/embed-subscribe/${encodeURIComponent(buttondownUser)}`
+  : "/obrigado";
+const method = useButtondown ? "post" : "get";
+---
+
+<form
+  class="newsletter"
+  action={action}
+  method={method}
+  novalidate
+  data-newsletter
+>
   <label for="email">A seleção, sem pressa.</label>
   <p class="muted" style="margin-bottom: 0.9rem;">
     Um aviso raro quando houver ensaio novo. Sem sequência, sem oferta.
   </p>
   <div class="nl-row">
-    <input type="email" id="email" name="email" required autocomplete="email" placeholder="seu@email.com" />
+    <input
+      type="email"
+      id="email"
+      name="email"
+      required
+      autocomplete="email"
+      inputmode="email"
+      spellcheck="false"
+      maxlength="254"
+      placeholder="seu@email.com"
+      aria-describedby="nl-hint nl-privacy"
+    />
     <button type="submit">Inscrever</button>
   </div>
-  <p class="fine" style="margin-top: 0.85rem;">
-    Por enquanto o pedido chega à redação por e-mail — ainda sem lista automática.
+  <p id="nl-hint" class="fine nl-error" hidden data-nl-error>
+    Informe um e-mail válido (nome@domínio).
+  </p>
+  <p id="nl-privacy" class="fine" style="margin-top: 0.85rem;">
+    {
+      useButtondown ? (
+        <>
+          Entrada na lista quieta via Buttondown. Sem venda de dados.{" "}
+          <a href="/etica">Privacidade</a>.
+        </>
+      ) : (
+        <>
+          O pedido segue para a redação — ainda sem lista automática no ar. Não vendemos endereços.{" "}
+          <a href="/etica">Privacidade</a>.
+        </>
+      )
+    }
   </p>
 </form>
+
+<script>
+  const form = document.querySelector("[data-newsletter]");
+  if (form instanceof HTMLFormElement) {
+    const input = form.querySelector("#email");
+    const err = form.querySelector("[data-nl-error]");
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    form.addEventListener("submit", (e) => {
+      if (!(input instanceof HTMLInputElement)) return;
+      const v = input.value.trim();
+      input.value = v;
+      if (!re.test(v)) {
+        e.preventDefault();
+        if (err instanceof HTMLElement) err.hidden = false;
+        input.setAttribute("aria-invalid", "true");
+        input.focus();
+        return;
+      }
+      if (err instanceof HTMLElement) err.hidden = true;
+      input.removeAttribute("aria-invalid");
+    });
+    input?.addEventListener("input", () => {
+      if (err instanceof HTMLElement) err.hidden = true;
+      input.removeAttribute("aria-invalid");
+    });
+  }
+</script>

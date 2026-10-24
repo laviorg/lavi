@@ -19,15 +19,20 @@ const mailto = `mailto:${SITE.email}?subject=${subject}&body=${body}`;
   <div class="wrap">
     <article class="prose">
       <p class="kicker">Lista</p>
-      <h1 class="page-title">Recebemos o endereço</h1>
+      <h1 class="page-title">{emailOk ? "Pedido anotado" : "Quase lá"}</h1>
       {
         emailOk ? (
-          <p>
-            Anotamos <strong>{raw}</strong> neste pedido. Para confirmar o envio à redação (ainda sem provedor de lista), abra o e-mail abaixo — o endereço já vai no corpo.
-          </p>
+          <>
+            <p>
+              Recebemos o endereço <strong>{raw}</strong> neste pedido.
+            </p>
+            <p>
+              Ainda não há provedor de lista ligado no site. Para confirmar o envio à redação, abra o e-mail abaixo — o endereço já vai no corpo. Sem sequência automática até ligarmos um provedor.
+            </p>
+          </>
         ) : (
           <p>
-            Para entrar na lista quieta, envie seu endereço à redação. Ainda não há captura automática.
+            Para entrar na lista quieta, use um e-mail válido no formulário da home ou do diário — ou escreva direto à redação.
           </p>
         )
       }
@@ -35,9 +40,14 @@ const mailto = `mailto:${SITE.email}?subject=${subject}&body=${body}`;
         <a class="text-link" href={mailto}>Escrever para {SITE.email}</a>
       </p>
       <p class="muted">
-        Sem sequência automática até ligarmos um provedor. Aviso raro, só ensaio novo.
+        Aviso raro, só ensaio novo. Não vendemos listas. Detalhes em{" "}
+        <a href="/etica">ética / privacidade</a>.
       </p>
-      <p><a class="text-link" href="/diario">Voltar ao diário</a></p>
+      <p>
+        <a class="text-link" href="/diario">Voltar ao diário</a>
+        {" · "}
+        <a class="text-link" href="/">Home</a>
+      </p>
     </article>
   </div>
 </BaseLayout>

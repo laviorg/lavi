@@ -17,6 +17,7 @@ export const SITE = {
   volume: "Vol. 01 — Setembro",
   volume02: "Vol. 02 — Outubro–Dezembro",
   volume03: "Vol. 03 — Janeiro–Fevereiro",
+  volume04: "Vol. 04 — Março–Abril",
 } as const;
 
 export const SECAO_LABEL = {
@@ -146,7 +147,7 @@ export const COMODOS: Record<
     intro:
       "O banheiro de apartamento não precisa de hotel boutique. Precisa de superfície, um sabão, um roupão com peso certo. Corpo soft sem medicalizar: o intervalo entre a água e a roupa.",
     ogEssay: "pia-do-banheiro",
-    essayIds: ["pia-do-banheiro", "oleo-corporal", "o-peso-de-um-bom-roupao", "agua-do-banho-temperatura", "prateleira-do-banho-com-pouco", "sabonete-que-basta"],
+    essayIds: ["pia-do-banheiro", "oleo-corporal", "o-peso-de-um-bom-roupao", "agua-do-banho-temperatura", "prateleira-do-banho-com-pouco", "sabonete-que-basta", "toalha-que-seca-de-verdade"],
     eixos: ["banho"],
   },
   cozinha: {
@@ -165,6 +166,7 @@ export const COMODOS: Record<
       "natal-em-casa-sem-roteiro",
       "almoco-em-casa-meio-semana",
       "desligar-cozinha-no-calor",
+      "uma-panela-que-basta",
     ],
     eixos: ["mesa", "silencio", "manha"],
   },
@@ -205,6 +207,7 @@ export const COMODOS: Record<
       "lampada-que-a-leitura-pede",
       "gaveta-da-entrada",
       "vaso-uma-coisa-so",
+      "porta-que-segura-o-barulho",
     ],
     eixos: ["silencio", "textil", "luz"],
   },
@@ -241,6 +244,7 @@ export const CORPO_SOFT: Record<
       "pia-do-banheiro",
       "prateleira-do-banho-com-pouco",
       "sabonete-que-basta",
+      "toalha-que-seca-de-verdade",
     ],
     eixos: ["banho"],
   },

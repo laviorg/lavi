@@ -1504,3 +1504,15 @@ a.axis-card:hover .axis-card__label
   border-bottom-color:var(--clay);
   color:var(--clay)
 }
+
+
+.nl-error
+{
+  color: var(--ink, #2a2420);
+  margin-top: 0.55rem;
+}
+
+.newsletter input[aria-invalid="true"]
+{
+  outline: 1px solid color-mix(in srgb, #8b4513 55%, transparent);
+}
