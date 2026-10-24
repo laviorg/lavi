@@ -25,10 +25,12 @@ const axisCounts = Object.fromEntries(
         <p class="kicker">Neste hub</p>
         <ul class="axis-grid">
           {hub.axes.map((axis) => (
-            <li class="axis-card">
-              <span class="axis-card__label">{EIXO_LABEL[axis.eixo]}</span>
-              <span class="axis-card__blurb muted">{axis.blurb}</span>
-              <span class="axis-card__count">{countLabel(axisCounts[axis.eixo] ?? 0)}</span>
+            <li>
+              <a class="axis-card" href={`/eixo/${axis.eixo}`}>
+                <span class="axis-card__label">{EIXO_LABEL[axis.eixo]}</span>
+                <span class="axis-card__blurb muted">{axis.blurb}</span>
+                <span class="axis-card__count">{countLabel(axisCounts[axis.eixo] ?? 0)}</span>
+              </a>
             </li>
           ))}
         </ul>

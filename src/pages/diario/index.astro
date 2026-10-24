@@ -11,6 +11,7 @@ import {
   sortByDateDesc,
   SITE,
 } from "../../lib/site";
+import { EIXOS } from "../../content.config";
 
 const essays = sortByDateDesc(await getCollection("diario"));
 const bySecao = {
@@ -82,9 +83,14 @@ const jsonLd = {
         <a href="/diario?secao=corpo" data-secao-filter="corpo">Corpo</a>
         <a href="/diario?secao=ritual" data-secao-filter="ritual">Ritual</a>
       </nav>
+      <nav class="filter filter--eixos" aria-label="Filtrar por eixo">
+        {EIXOS.map((e) => (
+          <a href={`/eixo/${e}`}>{EIXO_LABEL[e]}</a>
+        ))}
+      </nav>
       <div class="essay-list diary-grid" data-essay-list>
         {essays.map((entry) => (
-          <a class="diary-card" href={essayPath(entry)} data-secao={entry.data.secao}>
+          <a class="diary-card" href={essayPath(entry)} data-secao={entry.data.secao} data-eixo={entry.data.eixo}>
             <img src={entry.data.hero} alt={entry.data.heroAlt} width="900" height="600" loading="lazy" />
             <div class="diary-card__body">
               <p class="kicker">{SECAO_LABEL[entry.data.secao]} · {EIXO_LABEL[entry.data.eixo]}</p>

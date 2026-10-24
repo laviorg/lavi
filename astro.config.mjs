@@ -5,5 +5,8 @@ export default defineConfig({
   site: "https://lavi.org",
   trailingSlash: "never",
   output: "static",
+  build: {
+    format: "file",
+  },
   integrations: [mdx()],
 });

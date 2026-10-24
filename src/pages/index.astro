@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Newsletter from "../components/Newsletter.astro";
-import { SITE, PILARES, essayPath, countLabel, sortByDateDesc, orgJsonLd } from "../lib/site";
+import { SITE, PILARES, SECAO_LABEL, essayPath, countLabel, sortByDateDesc, orgJsonLd } from "../lib/site";
 
 const essays = sortByDateDesc(await getCollection("diario"));
 const bySecao = {
@@ -15,6 +15,7 @@ const stack = ["ruido-que-a-casa-faz", "pia-do-banheiro"]
   .map((id) => essays.find((e) => e.id === id))
   .filter(Boolean);
 const cover = essays.find((e) => e.id === "quarto-sono") ?? essays[0];
+const recent = essays.slice(0, 6);
 ---
 
 <BaseLayout
@@ -51,12 +52,29 @@ const cover = essays.find((e) => e.id === "quarto-sono") ?? essays[0];
       </nav>
     </section>
     <hr class="rule" />
-    <section aria-labelledby="indice">
-      <p class="kicker" id="indice">Neste volume</p>
+    <section aria-labelledby="recentes">
+      <p class="kicker" id="recentes">Mais recentes</p>
+      <div class="recent-row">
+        {recent.map((entry) => (
+          <a class="recent-card" href={essayPath(entry)}>
+            <img src={entry.data.hero} alt={entry.data.heroAlt} width="720" height="480" loading="lazy" />
+            <p class="kicker">{SECAO_LABEL[entry.data.secao]}</p>
+            <h2>{entry.data.title}</h2>
+            <p class="muted">{entry.data.description}</p>
+          </a>
+        ))}
+      </div>
+      <p class="volume-more">
+        <a class="text-link" href="/diario">O diário completo</a>
+      </p>
+    </section>
+    <hr class="rule" />
+    <section aria-labelledby="destaque">
+      <p class="kicker" id="destaque">Em destaque · {SITE.volume}</p>
       <div class="mag">
         <a class="mag__lead fade-in d1" href={essayPath(featured)}>
           <img src={featured.data.hero} alt={featured.data.heroAlt} width="1200" height="800" />
-          <p class="kicker">{featured.data.secao === "casa" ? "Casa" : featured.data.secao === "corpo" ? "Corpo" : "Ritual"}</p>
+          <p class="kicker">{SECAO_LABEL[featured.data.secao]}</p>
           <h2>{featured.data.title}</h2>
           <p class="muted">{featured.data.description}</p>
         </a>
@@ -64,17 +82,12 @@ const cover = essays.find((e) => e.id === "quarto-sono") ?? essays[0];
           {stack.map((entry, i) => (
             <a class={`mag__stack fade-in d${i + 2}`} href={essayPath(entry!)}>
               <img src={entry!.data.hero} alt={entry!.data.heroAlt} width="900" height="600" loading="lazy" />
-              <p class="kicker">
-                {entry!.data.secao === "casa" ? "Casa" : entry!.data.secao === "corpo" ? "Corpo" : "Ritual"}
-              </p>
+              <p class="kicker">{SECAO_LABEL[entry!.data.secao]}</p>
               <h3>{entry!.data.title}</h3>
             </a>
           ))}
         </div>
       </div>
-      <p class="volume-more">
-        <a class="text-link" href="/diario">O diário completo</a>
-      </p>
     </section>
     <hr class="rule" />
     <section aria-labelledby="cartas">
