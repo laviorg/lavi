@@ -130,6 +130,7 @@ export const COMODOS: Record<
       "cama-linho-vs-algodao",
       "luz-nao-habito",
       "noite-sem-retangulo",
+      "travesseiro-que-nao-anuncia",
     ],
     eixos: ["luz", "textil", "silencio"],
   },
@@ -150,8 +151,13 @@ export const COMODOS: Record<
     intro:
       "A cozinha quieta não é open concept de revista. É bancada que aguenta o dia, uma tábua, uma tigela de grés. Menos aparelho à vista. Mais uso.",
     ogEssay: "bancada-que-pede-pouco",
-    essayIds: ["bancada-que-pede-pouco", "ceramica-na-mesa", "mesa-que-nao-recebe-o-celular"],
-    eixos: ["mesa", "silencio"],
+    essayIds: [
+      "bancada-que-pede-pouco",
+      "ceramica-na-mesa",
+      "mesa-que-nao-recebe-o-celular",
+      "quinze-minutos-na-bancada",
+    ],
+    eixos: ["mesa", "silencio", "manha"],
   },
 } as const;
 
