@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
-import { SITE, essayPath, sortByDateDesc, absoluteUrl } from "../lib/site";
+import { SITE, essayPath, sortByDateDesc, absoluteUrl, COMODO_IDS, COMODOS } from "../lib/site";
+import { EIXOS } from "../content.config";
 
 function isoDay(d: Date): string {
   return d.toISOString().slice(0, 10);
@@ -29,6 +30,17 @@ export const GET: APIRoute = async () => {
     { loc: `${SITE.url}/para-marcas`, lastmod: isoDay(latest) },
     { loc: `${SITE.url}/selecao`, lastmod: isoDay(latest) },
     { loc: `${SITE.url}/sobre`, lastmod: isoDay(latest) },
+    { loc: `${SITE.url}/volume/02`, lastmod: isoDay(latest) },
+    ...EIXOS.map((eixo) => ({
+      loc: `${SITE.url}/eixo/${eixo}`,
+      lastmod: isoDay(essays.find((e) => e.data.eixo === eixo)?.data.date ?? latest),
+    })),
+    ...COMODO_IDS.map((id) => ({
+      loc: `${SITE.url}${COMODOS[id].href}`,
+      lastmod: isoDay(
+        essays.find((e) => (COMODOS[id].essayIds as readonly string[]).includes(e.id))?.data.date ?? latest,
+      ),
+    })),
   ];
 
   const urls = [

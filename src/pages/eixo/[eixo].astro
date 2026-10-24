@@ -1,0 +1,97 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  EIXO_LABEL,
+  SECAO_LABEL,
+  essayPath,
+  formatDate,
+  countLabel,
+  sortByDateDesc,
+  SITE,
+  type Eixo,
+} from "../../lib/site";
+import { EIXOS } from "../../content.config";
+
+export function getStaticPaths() {
+  return EIXOS.map((eixo) => ({ params: { eixo } }));
+}
+
+const { eixo } = Astro.params;
+const eixoKey = eixo as Eixo;
+const label = EIXO_LABEL[eixoKey];
+const essays = sortByDateDesc(
+  (await getCollection("diario")).filter((e) => e.data.eixo === eixoKey),
+);
+
+const blurbs: Record<Eixo, string> = {
+  luz: "Temperatura, sombra e o que a casa diz ao corpo depois do escuro.",
+  textil: "Linho, algodão, peso e o que a pele reconhece na cama e no armário.",
+  mesa: "Peças que voltam todo dia: grés, peso, o jantar sem tablescape.",
+  armario: "Poucas peças, cabides iguais, comprar menos e melhor.",
+  banho: "Água, óleo, roupão — o intervalo entre o chuveiro e o dia.",
+  trabalho: "Postura e mesa em casa, sem figurino de escritório.",
+  manha: "Luz, água, um gesto. Sem a lista das 5h.",
+  silencio: "Subtrair o que pisca. Devolver a parede.",
+};
+
+const description = `${label}: ${blurbs[eixoKey]} Ensaios da Lavi.`;
+const ogImage = essays[0]?.data.ogImage ?? "/images/og-home.jpg";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": `${SITE.url}/eixo/${eixoKey}`,
+      name: label,
+      description,
+      url: `${SITE.url}/eixo/${eixoKey}`,
+      inLanguage: SITE.locale,
+      isPartOf: { "@id": `${SITE.url}/#website` },
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Lavi", item: SITE.url },
+        { "@type": "ListItem", position: 2, name: "Diário", item: `${SITE.url}/diario` },
+        { "@type": "ListItem", position: 3, name: label, item: `${SITE.url}/eixo/${eixoKey}` },
+      ],
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title={label}
+  description={description}
+  current="/diario"
+  ogImage={ogImage}
+  jsonLd={jsonLd}
+>
+  <div class="wrap">
+    <div class="fade-in">
+      <p class="kicker">Eixo</p>
+      <h1 class="page-title">{label}</h1>
+      <p class="intro">{blurbs[eixoKey]}</p>
+      <p class="muted">{countLabel(essays.length)}</p>
+      <div class="essay-list diary-grid" style="margin-top:1.6rem">
+        {essays.map((entry) => (
+          <a class="diary-card" href={essayPath(entry)}>
+            <img src={entry.data.hero} alt={entry.data.heroAlt} width="900" height="600" loading="lazy" />
+            <div class="diary-card__body">
+              <p class="kicker">{SECAO_LABEL[entry.data.secao]} · {label}</p>
+              <h2>{entry.data.title}</h2>
+              <p class="muted">{entry.data.description}</p>
+              <time class="date" datetime={entry.data.date.toISOString()}>{formatDate(entry.data.date)}</time>
+            </div>
+          </a>
+        ))}
+      </div>
+      {essays.length === 0 && <p class="muted">Nenhum ensaio neste eixo ainda.</p>}
+      <p class="volume-more">
+        <a class="text-link" href="/diario">Voltar ao diário</a>
+      </p>
+    </div>
+  </div>
+</BaseLayout>

@@ -2,7 +2,8 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Newsletter from "../components/Newsletter.astro";
-import { SITE, PILARES, essayPath, countLabel, sortByDateDesc, orgJsonLd } from "../lib/site";
+import SelecaoStrip from "../components/SelecaoStrip.astro";
+import { SITE, PILARES, COMODOS, COMODO_IDS, SECAO_LABEL, essayPath, countLabel, sortByDateDesc, orgJsonLd, selecaoStripItems, essaysForComodo } from "../lib/site";
 
 const essays = sortByDateDesc(await getCollection("diario"));
 const bySecao = {
@@ -15,6 +16,11 @@ const stack = ["ruido-que-a-casa-faz", "pia-do-banheiro"]
   .map((id) => essays.find((e) => e.id === id))
   .filter(Boolean);
 const cover = essays.find((e) => e.id === "quarto-sono") ?? essays[0];
+const recent = essays.slice(0, 6);
+const strip = selecaoStripItems(essays, 8);
+const comodoCounts = Object.fromEntries(
+  COMODO_IDS.map((id) => [id, essaysForComodo(id, essays).length]),
+);
 ---
 
 <BaseLayout
@@ -27,7 +33,7 @@ const cover = essays.find((e) => e.id === "quarto-sono") ?? essays[0];
 >
   <section class="cover-split" aria-label="Abertura">
     <div class="cover-split__panel">
-      <p class="volume">{SITE.volume}</p>
+      <p class="volume"><a class="volume-link" href="/volume/03">{SITE.volume03}</a> · <a class="volume-link" href="/volume/02">{SITE.volume02}</a> · arquivo {SITE.volume}</p>
       <h1 class="cover-split__manifesto">
         Lavi é uma curadoria silenciosa de casa, corpo e ritual. Preferimos o que dura, o que acalma a luz da casa, o que não precisa anunciar a si mesmo.
       </h1>
@@ -51,12 +57,45 @@ const cover = essays.find((e) => e.id === "quarto-sono") ?? essays[0];
       </nav>
     </section>
     <hr class="rule" />
-    <section aria-labelledby="indice">
-      <p class="kicker" id="indice">Neste volume</p>
+    <section aria-labelledby="comodos">
+      <p class="kicker" id="comodos">Por cômodo</p>
+      <nav class="comodo-row" aria-label="Cômodos da casa">
+        {COMODO_IDS.map((id) => (
+          <a class="comodo-chip" href={COMODOS[id].href}>
+            <span class="comodo-chip__label">{COMODOS[id].label}</span>
+            <span class="comodo-chip__blurb muted">{COMODOS[id].blurb}</span>
+            <span class="comodo-chip__count">{countLabel(comodoCounts[id] ?? 0)}</span>
+          </a>
+        ))}
+      </nav>
+    </section>
+    <hr class="rule" />
+    <section aria-labelledby="recentes">
+      <div class="selecao-strip__head">
+        <p class="kicker" id="recentes">Mais recentes · {SITE.volume03}</p>
+        <a class="text-link" href="/volume/03">Índice do volume</a>
+      </div>
+      <div class="recent-row">
+        {recent.map((entry) => (
+          <a class="recent-card" href={essayPath(entry)}>
+            <img src={entry.data.hero} alt={entry.data.heroAlt} width="720" height="480" loading="lazy" />
+            <p class="kicker">{SECAO_LABEL[entry.data.secao]}</p>
+            <h2>{entry.data.title}</h2>
+            <p class="muted">{entry.data.description}</p>
+          </a>
+        ))}
+      </div>
+      <p class="volume-more">
+        <a class="text-link" href="/diario">O diário completo</a>
+      </p>
+    </section>
+    <hr class="rule" />
+    <section aria-labelledby="destaque">
+      <p class="kicker" id="destaque">Em destaque · {SITE.volume}</p>
       <div class="mag">
         <a class="mag__lead fade-in d1" href={essayPath(featured)}>
           <img src={featured.data.hero} alt={featured.data.heroAlt} width="1200" height="800" />
-          <p class="kicker">{featured.data.secao === "casa" ? "Casa" : featured.data.secao === "corpo" ? "Corpo" : "Ritual"}</p>
+          <p class="kicker">{SECAO_LABEL[featured.data.secao]}</p>
           <h2>{featured.data.title}</h2>
           <p class="muted">{featured.data.description}</p>
         </a>
@@ -64,18 +103,15 @@ const cover = essays.find((e) => e.id === "quarto-sono") ?? essays[0];
           {stack.map((entry, i) => (
             <a class={`mag__stack fade-in d${i + 2}`} href={essayPath(entry!)}>
               <img src={entry!.data.hero} alt={entry!.data.heroAlt} width="900" height="600" loading="lazy" />
-              <p class="kicker">
-                {entry!.data.secao === "casa" ? "Casa" : entry!.data.secao === "corpo" ? "Corpo" : "Ritual"}
-              </p>
+              <p class="kicker">{SECAO_LABEL[entry!.data.secao]}</p>
               <h3>{entry!.data.title}</h3>
             </a>
           ))}
         </div>
       </div>
-      <p class="volume-more">
-        <a class="text-link" href="/diario">O diário completo</a>
-      </p>
     </section>
+    <hr class="rule" />
+    <SelecaoStrip items={strip} />
     <hr class="rule" />
     <section aria-labelledby="cartas">
       <h2 id="cartas" class="visually-hidden">Correspondência</h2>

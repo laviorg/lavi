@@ -1,0 +1,60 @@
+---
+import { amazonSearch } from "../lib/amazon";
+import { SECAO_LABEL, EIXO_LABEL, type Secao, type Eixo } from "../lib/site";
+
+interface Peca {
+  title: string;
+  query: string;
+  reason: string;
+  essayTitle: string;
+  essayHref: string;
+}
+
+interface Props {
+  secao: Secao;
+  eixo: Eixo;
+  pecas: Peca[];
+}
+
+const { secao, eixo, pecas } = Astro.props;
+const hubHref = `/${secao}`;
+const eixoHref = `/eixo/${eixo}`;
+---
+
+<aside class="essay-continue" aria-labelledby="essay-continue-title">
+  <p class="kicker" id="essay-continue-title">Continuar por aqui</p>
+  <nav class="essay-continue__hubs" aria-label="Hub e eixo">
+    <a class="essay-continue__chip" href={hubHref}>
+      <span class="essay-continue__chip-k">Hub</span>
+      <span class="essay-continue__chip-v">{SECAO_LABEL[secao]}</span>
+    </a>
+    <a class="essay-continue__chip" href={eixoHref}>
+      <span class="essay-continue__chip-k">Eixo</span>
+      <span class="essay-continue__chip-v">{EIXO_LABEL[eixo]}</span>
+    </a>
+  </nav>
+  {
+    pecas.length > 0 && (
+      <div class="essay-continue__pecas">
+        <p class="kicker">Peças próximas</p>
+        <ul>
+          {pecas.map((item) => (
+            <li>
+              <a href={amazonSearch(item.query)} rel="sponsored noopener noreferrer">
+                {item.title}
+              </a>
+              <span class="muted"> — em </span>
+              <a class="essay-continue__essay" href={item.essayHref}>
+                {item.essayTitle}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <p class="fine">
+          Links afiliados quando indicados. <a href="/etica">Ética</a> ·{" "}
+          <a href="/selecao">Seleção</a>
+        </p>
+      </div>
+    )
+  }
+</aside>

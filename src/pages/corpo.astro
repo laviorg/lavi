@@ -1,10 +1,14 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { HUBS, EIXO_LABEL, essayPath, formatDate, countLabel, sortByDateDesc } from "../lib/site";
+import { HUBS, CORPO_SOFT, CORPO_SOFT_IDS, EIXO_LABEL, essayPath, formatDate, countLabel, sortByDateDesc, essaysForCorpoSoft } from "../lib/site";
 
 const hub = HUBS.corpo;
-const essays = sortByDateDesc((await getCollection("diario")).filter((e) => e.data.secao === "corpo"));
+const allEssays = await getCollection("diario");
+const essays = sortByDateDesc(allEssays.filter((e) => e.data.secao === "corpo"));
+const softCounts = Object.fromEntries(
+  CORPO_SOFT_IDS.map((id) => [id, essaysForCorpoSoft(id, allEssays).length]),
+);
 const axisCounts = Object.fromEntries(
   hub.axes.map((a) => [a.eixo, essays.filter((e) => e.data.eixo === a.eixo).length]),
 );
@@ -21,14 +25,30 @@ const axisCounts = Object.fromEntries(
       <p class="kicker">{hub.kicker}</p>
       <h1 class="page-title">{hub.title}</h1>
       <p class="intro">{hub.intro}</p>
+      <section class="hub-axes" aria-label="Caminhos de corpo soft">
+        <p class="kicker">Caminhos</p>
+        <ul class="axis-grid">
+          {CORPO_SOFT_IDS.map((id) => (
+            <li>
+              <a class="axis-card" href={CORPO_SOFT[id].href}>
+                <span class="axis-card__label">{CORPO_SOFT[id].label}</span>
+                <span class="axis-card__blurb muted">{CORPO_SOFT[id].blurb}</span>
+                <span class="axis-card__count">{countLabel(softCounts[id] ?? 0)}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
       <section class="hub-axes" aria-label="Eixos de Corpo">
         <p class="kicker">Neste hub</p>
         <ul class="axis-grid">
           {hub.axes.map((axis) => (
-            <li class="axis-card">
-              <span class="axis-card__label">{EIXO_LABEL[axis.eixo]}</span>
-              <span class="axis-card__blurb muted">{axis.blurb}</span>
-              <span class="axis-card__count">{countLabel(axisCounts[axis.eixo] ?? 0)}</span>
+            <li>
+              <a class="axis-card" href={`/eixo/${axis.eixo}`}>
+                <span class="axis-card__label">{EIXO_LABEL[axis.eixo]}</span>
+                <span class="axis-card__blurb muted">{axis.blurb}</span>
+                <span class="axis-card__count">{countLabel(axisCounts[axis.eixo] ?? 0)}</span>
+              </a>
             </li>
           ))}
         </ul>

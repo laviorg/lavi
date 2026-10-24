@@ -1,0 +1,134 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  SITE,
+  SECAO_LABEL,
+  COMODOS,
+  COMODO_IDS,
+  essayPath,
+  formatDate,
+  sortByDateDesc,
+  countLabel,
+} from "../../lib/site";
+
+const all = sortByDateDesc(await getCollection("diario"));
+/** Vol. 02 opens with October 2026 pieces (cortina onward) plus the living archive around them. */
+const vol02Start = new Date("2026-10-01T00:00:00.000Z");
+const vol03Start = new Date("2027-01-01T00:00:00.000Z");
+const vol02 = all.filter(
+  (e) => e.data.date.getTime() >= vol02Start.getTime() && e.data.date.getTime() < vol03Start.getTime(),
+);
+const featured = vol02;
+const hubs = [
+  { href: "/casa", label: "Casa", desc: "Luz, tecido, superfície, cômodo." },
+  { href: "/corpo", label: "Corpo", desc: "Banho, sono, movimento — soft, sem clínica." },
+  { href: "/corpo/banho", label: "Banho", desc: "Temperatura, óleo, roupão." },
+  { href: "/corpo/sono", label: "Sono e chão", desc: "Travesseiro, quarto, tapete." },
+  { href: "/ritual", label: "Ritual", desc: "Gestos sem app: mesa, manhã, silêncio." },
+  { href: "/selecao", label: "Seleção", desc: "Peças que atravessaram o texto." },
+];
+
+const description =
+  "Vol. 02 — Outubro a dezembro: o que a casa pede quando o estímulo sobe. Índice completo do calendário quiet living — ensaios, cômodos e pilares.";
+const ogImage = vol02[0]?.data.ogImage ?? "/images/og-home.jpg";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": `${SITE.url}/volume/02`,
+      name: SITE.volume02,
+      description,
+      url: `${SITE.url}/volume/02`,
+      inLanguage: SITE.locale,
+      isPartOf: { "@id": `${SITE.url}/#website` },
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Lavi", item: SITE.url },
+        { "@type": "ListItem", position: 2, name: "Diário", item: `${SITE.url}/diario` },
+        { "@type": "ListItem", position: 3, name: SITE.volume02, item: `${SITE.url}/volume/02` },
+      ],
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title={SITE.volume02}
+  description={description}
+  current="/diario"
+  ogImage={ogImage}
+  jsonLd={jsonLd}
+>
+  <div class="wrap">
+    <article class="prose fade-in" style="max-width: 40rem;">
+      <p class="kicker">Volume</p>
+      <h1 class="page-title">{SITE.volume02}</h1>
+      <p class="intro">
+        O Vol. 01 fechou o que a casa já sabia dizer em voz baixa. O Vol. 02 — outubro a dezembro — é o calendário de oito semanas: calor, ventilador, lavanderia, Natal sem roteiro. Continua o mesmo critério: matéria, gesto, apartamento brasileiro. Sem vitrine. Sem pressa. Calendário editorial completo neste índice.
+      </p>
+      <p>
+        Este índice não é manifesto longo. É porta. Ensaios que já estão no ar, cômodos onde a casa acontece, pilares para quem chega agora.
+      </p>
+      <p class="muted">{countLabel(vol02.length)} neste volume (outubro–dezembro 2026).</p>
+    </article>
+
+    <section class="hub-axes fade-in d1" aria-labelledby="vol02-ensaios" style="margin-top:2rem">
+      <p class="kicker" id="vol02-ensaios">Neste volume</p>
+      <div class="essay-list diary-grid" style="margin-top:1rem">
+        {featured.map((entry) => (
+          <a class="diary-card" href={essayPath(entry)}>
+            <img src={entry.data.hero} alt={entry.data.heroAlt} width="900" height="600" loading="lazy" />
+            <div class="diary-card__body">
+              <p class="kicker">{SECAO_LABEL[entry.data.secao]}</p>
+              <h2>{entry.data.title}</h2>
+              <p class="muted">{entry.data.description}</p>
+              <time class="date" datetime={entry.data.date.toISOString()}>{formatDate(entry.data.date)}</time>
+            </div>
+          </a>
+        ))}
+      </div>
+      {vol02.length === 0 && <p class="muted">Os primeiros ensaios do volume entram em breve.</p>}
+    </section>
+
+    <hr class="rule" />
+
+    <section aria-labelledby="vol02-comodos">
+      <p class="kicker" id="vol02-comodos">Por cômodo</p>
+      <nav class="comodo-row" aria-label="Cômodos">
+        {COMODO_IDS.map((id) => (
+          <a class="comodo-chip" href={COMODOS[id].href}>
+            <span class="comodo-chip__label">{COMODOS[id].label}</span>
+            <span class="comodo-chip__blurb muted">{COMODOS[id].blurb}</span>
+          </a>
+        ))}
+      </nav>
+    </section>
+
+    <hr class="rule" />
+
+    <section aria-labelledby="vol02-pilares">
+      <p class="kicker" id="vol02-pilares">Pilares</p>
+      <nav class="pillar-nav" aria-label="Pilares">
+        {hubs.map((h) => (
+          <a class="pillar-card" href={h.href}>
+            <span class="pillar-card__label">{h.label}</span>
+            <span class="pillar-card__desc muted">{h.desc}</span>
+          </a>
+        ))}
+      </nav>
+    </section>
+
+    <p class="volume-more">
+      <a class="text-link" href="/volume/03">{SITE.volume03} — próximo</a>
+      <span aria-hidden="true"> · </span>
+      <a class="text-link" href="/diario">O diário completo</a>
+      <span aria-hidden="true"> · </span>
+      <a class="text-link" href="/">{SITE.volume} na home</a>
+    </p>
+  </div>
+</BaseLayout>

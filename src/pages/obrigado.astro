@@ -1,6 +1,14 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { SITE } from "../lib/site";
+
+const raw = Astro.url.searchParams.get("email")?.trim() ?? "";
+const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(raw);
+const subject = encodeURIComponent("Lista Lavi — correspondência");
+const body = emailOk
+  ? encodeURIComponent(`Olá Lavi,\n\nQuero entrar na lista quieta.\n\nEndereço: ${raw}\n`)
+  : encodeURIComponent("Olá Lavi,\n\nQuero entrar na lista quieta.\n\nEndereço: \n");
+const mailto = `mailto:${SITE.email}?subject=${subject}&body=${body}`;
 ---
 
 <BaseLayout
@@ -12,10 +20,23 @@ import { SITE } from "../lib/site";
     <article class="prose">
       <p class="kicker">Lista</p>
       <h1 class="page-title">Recebemos o endereço</h1>
+      {
+        emailOk ? (
+          <p>
+            Anotamos <strong>{raw}</strong> neste pedido. Para confirmar o envio à redação (ainda sem provedor de lista), abra o e-mail abaixo — o endereço já vai no corpo.
+          </p>
+        ) : (
+          <p>
+            Para entrar na lista quieta, envie seu endereço à redação. Ainda não há captura automática.
+          </p>
+        )
+      }
       <p>
-        Se quiser, envie o endereço direto a <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+        <a class="text-link" href={mailto}>Escrever para {SITE.email}</a>
       </p>
-      <p class="muted">Até a lista estar ligada a um provedor, o aviso chega por e-mail editorial. Sem sequência automática.</p>
+      <p class="muted">
+        Sem sequência automática até ligarmos um provedor. Aviso raro, só ensaio novo.
+      </p>
       <p><a class="text-link" href="/diario">Voltar ao diário</a></p>
     </article>
   </div>

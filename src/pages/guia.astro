@@ -1,55 +1,145 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { SITE } from "../lib/site";
+
+const howtos = [
+  {
+    title: "Menos estímulo no quarto",
+    blurb: "Cortina que corta o dia, travesseiro sem anúncio, a noite sem retângulo.",
+    links: [
+      { href: "/diario/cortina-que-corta-o-dia", label: "A cortina que corta o dia" },
+      { href: "/diario/travesseiro-que-nao-anuncia", label: "O travesseiro que não anuncia nada" },
+      { href: "/diario/noite-sem-retangulo", label: "Noite sem retângulo" },
+      { href: "/casa/quarto", label: "Hub do quarto" },
+    ],
+  },
+  {
+    title: "Bancada e mesa com pouco",
+    blurb: "Quinze minutos, grés, o celular fora do jantar.",
+    links: [
+      { href: "/diario/quinze-minutos-na-bancada", label: "Quinze minutos na bancada" },
+      { href: "/diario/mesa-que-nao-recebe-o-celular", label: "A mesa que não recebe o celular" },
+      { href: "/diario/bancada-que-pede-pouco", label: "Bancada que pede pouco" },
+      { href: "/casa/cozinha", label: "Hub da cozinha" },
+      { href: "/diario/fechar-a-cozinha-a-noite", label: "Fechar a cozinha à noite" },
+      { href: "/diario/natal-em-casa-sem-roteiro", label: "Natal em casa sem roteiro" },
+    ],
+  },
+  {
+    title: "Corredor e lavanderia",
+    blurb: "A passagem volta a ser passagem: tampa, varal que some.",
+    links: [
+      { href: "/diario/lavanderia-que-some-do-corredor", label: "A lavanderia que some do corredor" },
+      { href: "/diario/cesto-que-segura-a-casa", label: "O cesto que segura a casa" },
+      { href: "/casa/lavanderia", label: "Hub da lavanderia" },
+    ],
+  },
+  {
+    title: "Sala com uma manta",
+    blurb: "Silêncio visual, um throw, o cesto opaco.",
+    links: [
+      { href: "/diario/manta-que-a-sala-pede", label: "A manta que a sala pede" },
+      { href: "/diario/silencio-na-sala", label: "Silêncio na sala" },
+      { href: "/diario/cesto-que-segura-a-casa", label: "O cesto que segura a casa" },
+      { href: "/casa/sala", label: "Hub da sala" },
+      { href: "/diario/vol-02-casa-quando-o-calor-sobe", label: "Vol. 02 — quando o calor sobe" },
+    ],
+  },
+  {
+    title: "Corpo soft sem programa",
+    blurb: "Banho, roupão, o quarteirão — sem placar.",
+    links: [
+      { href: "/diario/caminhada-no-quarteirao", label: "Caminhada no quarteirão" },
+      { href: "/diario/oleo-corporal", label: "Óleo corporal" },
+      { href: "/diario/o-peso-de-um-bom-roupao", label: "O peso de um bom roupão" },
+      { href: "/corpo", label: "Hub Corpo" },
+      { href: "/corpo/banho", label: "Caminho Banho" },
+      { href: "/corpo/sono", label: "Caminho Sono e chão" },
+      { href: "/diario/chao-descalco", label: "O chão descalço" },
+    ],
+  },
+];
 ---
 
 <BaseLayout
-  title="Casa com menos estímulo"
-  description="Guia digital em PDF: síntese dos ensaios de casa da Lavi, checklist por cômodo e ordem de subtração. R$ 49 — entrega via Hotmart após a compra."
+  title="Guia — Casa com menos estímulo"
+  description="How-tos quiet living da Lavi: caminhos curtos pelos ensaios de casa, ritual e corpo soft — e o PDF Casa com menos estímulo."
+  current="/guia"
 >
   <div class="wrap">
     <article class="prose fade-in">
-      <p class="kicker">Guia digital</p>
+      <p class="kicker">Guia</p>
       <h1 class="page-title">Casa com menos estímulo</h1>
       <p class="intro">
-        Um PDF curto que ordena o que já está no diário: o que tirar primeiro, o que manter, e como comprar sem lista de desejo.
+        Caminhos curtos pelo diário — o que tirar primeiro, o que manter — sem checklist clínico e sem domingo útil. Abaixo, how-tos que apontam aos ensaios. No fim, o PDF que junta o núcleo de Casa.
       </p>
-      <p>
-        Os ensaios da Lavi sobre casa já dizem o essencial — luz, tecido, armário, mesa. O guia não substitui essa leitura. Junta-a em capítulos, acrescenta checklist por cômodo e uma ordem de subtração. Formato digital; o PDF chega pela Hotmart após a compra.
-      </p>
-      <p class="price-note">
-        <span class="price">R$&nbsp;49</span> · pagamento único · sem assinatura
-      </p>
-      <h2>O que o guia acrescenta</h2>
+
+      <h2>How-tos no diário</h2>
+      <p class="muted">Ordem de leitura sugerida. Cada bloco cabe numa tarde; o critério é o mesmo em todos: subtração antes de compra.</p>
+      {
+        howtos.map((block) => (
+          <section class="guia-block" aria-labelledby={block.title}>
+            <h3 id={block.title}>{block.title}</h3>
+            <p>{block.blurb}</p>
+            <ul>
+              {block.links.map((l) => (
+                <li>
+                  <a href={l.href}>{l.label}</a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+
+      <h2>Por cômodo</h2>
       <ul>
-        <li>Síntese em capítulos a partir dos ensaios de Casa (e dois companheiros de Ritual).</li>
-        <li>Checklist por cômodo — sala, quarto, cozinha, o que cabe no armário.</li>
-        <li>Ordem de subtração: o que tirar primeiro, antes de comprar qualquer coisa.</li>
+        <li><a href="/casa/quarto">Quarto</a></li>
+        <li><a href="/casa/banheiro">Banheiro</a></li>
+        <li><a href="/casa/cozinha">Cozinha</a></li>
+        <li><a href="/casa/lavanderia">Lavanderia</a></li>
+        <li><a href="/casa/sala">Sala</a></li>
+        <li><a href="/casa">Todos em Casa</a> · <a href="/volume/02">Vol. 02</a></li>
+      </ul>
+
+      <h2>O PDF</h2>
+      <p>
+        Os ensaios já dizem o essencial. O guia em PDF não substitui essa leitura — junta-a em capítulos, acrescenta checklist por cômodo e uma ordem de subtração. Formato digital; chega pela Hotmart após a compra.
+      </p>
+      <ul>
+        <li>Síntese em capítulos a partir dos ensaios de Casa (e companheiros de Ritual).</li>
+        <li>Checklist por cômodo — sala, quarto, cozinha, lavanderia, o que cabe no armário.</li>
+        <li>Ordem de subtração: o que tirar primeiro, antes de comprar.</li>
         <li>Critérios de compra sem lista de ASIN — matéria, peso, luz, uso.</li>
         <li>Uma página de “o que não comprar”.</li>
       </ul>
-      <h2>Ensaios de origem</h2>
-      <p class="muted" style="margin-bottom: 0.75rem;">Núcleo Casa</p>
-      <ul>
-        <li><a href="/diario/luz-nao-habito">Luz, não hábito</a></li>
-        <li><a href="/diario/cama-linho-vs-algodao">Cama: linho vs algodão</a></li>
-        <li><a href="/diario/armario-pequeno-e-caro">Armário pequeno e caro</a></li>
-        <li><a href="/diario/ceramica-na-mesa">Cerâmica na mesa</a></li>
-      </ul>
-      <p class="muted" style="margin-bottom: 0.75rem;">Companheiros (Ritual)</p>
-      <ul>
-        <li><a href="/diario/silencio-na-sala">Silêncio na sala</a></li>
-        <li><a href="/diario/rotina-da-manha">Rotina da manhã</a></li>
-      </ul>
-      <h2>Compra</h2>
-      <p>Checkout pela Hotmart. Após o pagamento, o PDF fica disponível na sua conta Hotmart e no e-mail de confirmação.</p>
+      <p class="price-note">
+        <span class="price">R$&nbsp;49</span> · pagamento único · sem assinatura
+      </p>
       <p>
         <a class="btn" href={SITE.hotmart} target="_blank" rel="noopener noreferrer">Comprar o guia — R$&nbsp;49</a>
       </p>
       <p class="fine" style="margin-top: 1.75rem;">
-        Afiliados Amazon seguem nos ensaios — tag laviorg-20 — com a regra em <a href="/etica">ética</a>. Dúvidas:{" "}
+        Afiliados Amazon nos ensaios — tag laviorg-20 — com a regra em <a href="/etica">ética</a>. Dúvidas:{" "}
         <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
       </p>
     </article>
   </div>
 </BaseLayout>
+
+<style>
+  .guia-block {
+    margin: 1.75rem 0 2rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--border, #ddd) 80%, transparent);
+  }
+  .guia-block:last-of-type {
+    border-bottom: 0;
+  }
+  .guia-block h3 {
+    margin-bottom: 0.35rem;
+  }
+  .guia-block ul {
+    margin-top: 0.5rem;
+  }
+</style>

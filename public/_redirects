@@ -3,3 +3,4 @@
 # Astro `trailingSlash: "never"` emits the same 308 at the origin.
 
 /*/ /:splat 308
+/sitemap.xml /sitemap-index.xml 301
